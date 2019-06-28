@@ -24,6 +24,17 @@ CHARS = {'STX': '\x02',
          'Esc':'\x1b'}
 
 
+STATUS_bits = {'AirPump': 0,
+          'LiqPump': 1,
+          'Fan': 2,
+          'Heater': 3,
+          'AutoStart': 4,
+          'ErrorFlag': 5,
+          'Bottle': 6,
+          'DataMemory': 7,
+          'CalMemory': 8}
+
+
 def get_ports():
     return glob.glob('/dev/ttyUSB*')
 
@@ -104,6 +115,14 @@ def get_datetime(interval=10):
 def cal_func(res, std=[0, 50, 500]):
     z = np.polyfit(x=res, y=std, deg=2)
     return np.poly1d(z)
+
+
+def get_status(status_hex, bits=STATUS_bits):
+    code = bin(int(status_hex, 16))[2:].zfill(9)[::-1]
+    status = {}
+    for key, value in bits.items():
+        status[key] = code[value]
+    return status
 
 
 if __name__ == '__main__':
