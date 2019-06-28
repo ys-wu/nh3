@@ -150,3 +150,4 @@ if __name__ == '__main__':
 	        data['NH3'] = NH3
 	        print(data['date_time'], end='\t')
 	        print(data['NH3'])
+	        print(get_status(data['Status']))
