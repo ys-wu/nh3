@@ -7,7 +7,7 @@ import serial
 
 COMMANDS = {'Status': '?',
             'Mode': 'M',
-            'Satart': 'E',
+            'Start': 'E',
             'Stop': 'S',
             'Error': '!',
             'Mem': 'C',
@@ -86,9 +86,9 @@ def parse_data(string):
 
 def form_command(command, param=None, method='get'):
     if method == 'get':
-        s = CHARS['Esc'] + COMMANDS[command]
+        s = CHARS['Esc'] + command
     elif method == 'set':
-        s = CHARS['STX'] + COMMANDS[command] + param + CHARS['CR']
+        s = CHARS['STX'] + command + param + CHARS['CR']
     return s.encode('utf-8')
 
 
@@ -136,7 +136,7 @@ if __name__ == '__main__':
     print(ser)
     f = cal_func(res)
 
-    for i in range(10):
+    while True:
 	    date_time = get_datetime(1)
 	    data = get_data(ser)
 	    if data:
@@ -148,6 +148,5 @@ if __name__ == '__main__':
 	        data['date_time'] = date_time
 	        data['NH4'] = NH4
 	        data['NH3'] = NH3
-	        print(i, end='\t')
 	        print(data['date_time'], end='\t')
-	        print(data['conductivity'])
+	        print(data['NH3'])
