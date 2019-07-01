@@ -3,6 +3,15 @@ import pandas as pd
 import os, glob, re
 import datetime, time
 import serial
+import threading
+
+from flask import Flask, render_template, jsonify
+app = Flask(__name__)
+
+
+CAL = {0: 0, 50: 381.6, 500: 1381.5} # 2018.06 calibration
+COEF = 26 # liquid NH4+ (ppbm) to gas NH3 (pptv)
+INTERVAL = 1 # samnpling time invteval
 
 
 COMMANDS = {'Status': '?',
@@ -75,7 +84,7 @@ def parse_data(string):
     columns = ['Status', 'temperature', 'airflow', 'Detector1', 'Detector2', 'conductivity']
     pattern = 'Y;\d{5}.\d{5};\d{2};\d{1};\d{2};[a-zA-Z0-9]{4};\d{4};\d{3};\d{5};\d{5};\d{5};\d{5};\d{5}'
     for s in str_arr:
-        if s[0] == COMMANDS['Data'] and re.fullmatch(pattern, s): 
+        if s and s[0] == COMMANDS['Data'] and re.fullmatch(pattern, s): 
             x = s.split(';')
     if 'x' in locals():
         data = [x[5], int(x[6])/100, int(x[7])/100, int(x[8])/10, int(x[9])/10, int(x[10])/10]
@@ -112,8 +121,10 @@ def get_datetime(interval=10):
     return datetime.datetime.now()
              
 
-def cal_func(res, std=[0, 50, 500]):
-    z = np.polyfit(x=res, y=std, deg=2)
+def cal_func(cal_params):
+    x = [v for v in cal_params.values()]
+    y = [k for k in cal_params.keys()]
+    z = np.polyfit(x, y, deg=2)
     return np.poly1d(z)
 
 
@@ -121,33 +132,54 @@ def get_status(status_hex, bits=STATUS_bits):
     code = bin(int(status_hex, 16))[2:].zfill(9)[::-1]
     status = {}
     for key, value in bits.items():
-        status[key] = code[value]
+        status[key] = int(code[value])
     return status
 
 
-if __name__ == '__main__':
-    res = [0, 381.6, 1381.5] # 2018.06 cal
-
-    ports = get_ports()
-    print(ports)
-    port = test_port(ports)
-    print(port)
-    ser = init_port(port)
-    print(ser)
-    f = cal_func(res)
-
+def update_data():
+    global data
+    data = {}
     while True:
-	    date_time = get_datetime(1)
-	    data = get_data(ser)
-	    if data:
-	        NH4 = f(data['conductivity']) # ppb(aq)
-	        try:
-	            NH3 = NH4*26/data['airflow'] # ppt(g)
-	        except ZeroDivisionError:
-	            NH3 = 0
-	        data['date_time'] = date_time
-	        data['NH4'] = NH4
-	        data['NH3'] = NH3
-	        print(data['date_time'], end='\t')
-	        print(data['NH3'])
-	        print(get_status(data['Status']))
+        date_time = get_datetime(1)
+        raw_data = get_data(ser)
+        if raw_data:
+            data = raw_data
+            data['date_time'] = date_time
+            data['NH4'] = func(data['conductivity']) # ppb(aq)
+            data['Status'] = get_status(data['Status'])
+            if data['Status']['AirPump']:
+                data['NH3'] = data['NH4']*COEF/data['airflow'] # ppt(g)
+            else:
+                data['NH3'] = 0
+            print(data)
+
+
+func = cal_func(CAL)
+ports = get_ports()
+print(ports)
+time.sleep(1)
+port = test_port(ports)
+print(port)
+time.sleep(1)
+ser = init_port(port)
+print(ser)
+time.sleep(2)
+send_command(ser, COMMANDS['Start'])
+time.sleep(2)
+
+x = threading.Thread(target=update_data)
+x.start()
+
+
+@app.route("/")
+def main():
+    return render_template('index.html')
+
+
+@app.route("/update", methods=["POST"])
+def update():
+    if data:
+        return jsonify({'success': True, 'data': data})
+    else:
+        return jsonify({'success': False})
+
