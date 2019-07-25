@@ -4,6 +4,12 @@ import os, glob, re
 import datetime, time
 import serial
 import threading
+import copy
+
+import pymongo
+client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = client["NH3"]
+col = db["raw_data"]
 
 from flask import Flask, render_template, jsonify
 app = Flask(__name__)
@@ -65,7 +71,7 @@ def test_port(ports, baudrate=19200, timeout=0.1):
                     return p
 
 
-def init_port(port, baudrate=19200, timeout=0.1):
+def init_port(port, baudrate=19200, timeout=0.5):
     ser = serial.Serial(port)
     ser.baudrate = baudrate
     ser.timeout = timeout
@@ -115,10 +121,10 @@ def send_command(ser, command, param=None, method='get'):
 
 
 def get_datetime(interval=10):
-    t0 = int(datetime.datetime.now().timestamp()/interval)
-    while int(datetime.datetime.now().timestamp()/interval) == t0:
+    t0 = int(datetime.datetime.utcnow().timestamp()/interval)
+    while int(datetime.datetime.utcnow().timestamp()/interval) == t0:
         time.sleep(0.01)
-    return datetime.datetime.now()
+    return datetime.datetime.utcnow()
              
 
 def cal_func(cal_params):
@@ -139,9 +145,13 @@ def get_status(status_hex, bits=STATUS_bits):
 def update_data():
     global data
     data = {}
+    print('------------- empyt data ---------------')
+    print(data)
     while True:
         date_time = get_datetime(1)
         raw_data = get_data(ser)
+        print('-------------- raw data ---------------')
+        print(raw_data)
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
@@ -151,7 +161,8 @@ def update_data():
                 data['NH3'] = data['NH4']*COEF/data['airflow'] # ppt(g)
             else:
                 data['NH3'] = 0
-            print(data)
+            x = copy.deepcopy(data)
+            col.insert_one(x)
 
 
 func = cal_func(CAL)
@@ -178,6 +189,8 @@ def main():
 
 @app.route("/update", methods=["POST"])
 def update():
+    print('------------------data ---------------')
+    print(data)
     if data:
         return jsonify({'success': True, 'data': data})
     else:
