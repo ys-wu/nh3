@@ -33,8 +33,6 @@ days = [start + timedelta(i) for i in range((end-start).days + 1)]
 for day in days:
 	day_str = day.strftime('%Y-%m-%d')
 	next_day_str = (day + timedelta(1)).strftime('%Y-%m-%d')
-	file_name = data_dir + os.sep + day_str
-	print(file_name, flush=True)
 	query = {'date_time': {'$gte': day_str, '$lte': next_day_str}}
 
 	# load data
@@ -45,6 +43,8 @@ for day in days:
 	if '_id' in df: del df['_id']
 
 	# save data
-	df.to_pickle(file_name + '.pkl')
+	print(day_str, flush=True)
+	file_name = data_dir + os.sep + day_str
+	df.to_csv(file_name + '.pkl')
 	df.to_pickle(file_name + '.csv', index=False)
 
