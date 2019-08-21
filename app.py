@@ -145,13 +145,13 @@ def get_status(status_hex, bits=STATUS_bits):
 def update_data():
     global data
     data = {}
-    print('------------- empyt data ---------------')
-    print(data)
+    # print('------------- empyt data ---------------')
+    # print(data)
     while True:
         date_time = get_datetime(1)
         raw_data = get_data(ser)
-        print('-------------- raw data ---------------')
-        print(raw_data)
+        # print('-------------- raw data ---------------')
+        # print(raw_data)
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
@@ -199,10 +199,11 @@ def update():
 
 @app.route("/command", methods=["POST"])
 def get_command():
+    print('************************************')
+    print('************************************')
     command = request.form.get("command")
     on_off = request.form.get("on_off")
     send_command(ser, COMMANDS[command], on_off, 'set')
-    print(command, on_ff)
-    print(command, on_ff)
-    print(command, on_ff)
-    print(command, on_ff)
+    print(command, on_off)
+    print('************************************')
+    print('************************************')
