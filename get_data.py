@@ -31,9 +31,11 @@ end = datetime.strptime(end, '%Y-%m-%d')
 days = [start + timedelta(i) for i in range((end-start).days + 1)]
 
 for day in days:
-	file_name = data_dir + os.sep + day + '_' + day + timedelta(1)
+	day_str = day.strftime('%Y-%m-%d')
+	next_day_str = (day + timedelta(1)).strftime('%Y-%m-%d')
+	file_name = data_dir + os.sep + day_str
 	print(file_name, flush=True)
-	query = {'date_time': {'$gte': day, '$lte': day + timedelta(1)}}
+	query = {'date_time': {'$gte': day_str, '$lte': next_day_str}}
 
 	# load data
 	cursor = col.find(query)
