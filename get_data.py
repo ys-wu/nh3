@@ -38,12 +38,14 @@ for day in days:
 	# load data
 	cursor = col.find(query)
 	df =  pd.DataFrame(list(cursor))
+	print(day, flush=True)
 
 	if not df.empty:
 		# Delete the _id
 		if '_id' in df: del df['_id']
-
 		# save data
-		print(day, flush=True)
+		print('data saved.')
 		file_name = data_dir + os.sep + day.strftime(fmt)
 		df.to_csv(file_name + '.csv', index=False)
+	else:
+		print('no data this day.')
