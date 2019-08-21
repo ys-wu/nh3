@@ -46,5 +46,4 @@ for day in days:
 	print(day, flush=True)
 	file_name = data_dir + os.sep + day.strftime(fmt)
 	df.to_csv(file_name + '.csv', index=False)
-	df.to_pickle(file_name + '.pkl')
 
