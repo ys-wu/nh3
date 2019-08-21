@@ -33,8 +33,10 @@ if files:
 else:
 	start = datetime.utcnow().date() - timedelta(365)
 
+print('last_date', start)
 sleep(sleep_time)
 end = datetime.utcnow().date()
+print('today', end)
 
 while True:
 	if start != end:
