@@ -14,6 +14,27 @@
     <div><ul id="data"></ul></div>
     <div><ul id="status"></ul></div>
     <select id="params"></select>
+
+    <form action="/command">
+        <select id="commands">
+            <option value="Status">Status</option>
+            <option value="Mode">Mode</option>
+            <option value="Stop">Stop</option>
+            <option value="Mem">Mem</option>
+            <option value="Reset">Reset</option>
+            <option value="Data">Data</option>
+            <option value="AirPump">AirPump</option>
+            <option value="LiqPump">LiqPump</option>
+            <option value="Valve">Valve</option>
+            <option value="Fan">Fan</option>
+        </select>
+        <select id="on_off">
+            <option value=0>Off</option>
+            <option value=1>On</option>
+        </select>
+        <input type="submit" value="Submit">
+    </form>
+    
     <button onclick="plot()">plot</button>
     <div id="plots"></div>
 </body>
