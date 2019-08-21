@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+    <script src="{{ url_for('static', filename='plotly-latest.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+    <title>Ammonia</title>
+</head>
+<body>
+    <div id="date_time"></div>
+    <div><ul id="data"></ul></div>
+    <div><ul id="status"></ul></div>
+    <select id="params"></select>
+    <button onclick="plot()">plot</button>
+    <div id="plots"></div>
+</body>
+</html>
