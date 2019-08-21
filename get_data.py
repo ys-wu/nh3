@@ -39,11 +39,11 @@ for day in days:
 	cursor = col.find(query)
 	df =  pd.DataFrame(list(cursor))
 
-	# Delete the _id
-	if '_id' in df: del df['_id']
+	if not df.empty:
+		# Delete the _id
+		if '_id' in df: del df['_id']
 
-	# save data
-	print(day, flush=True)
-	file_name = data_dir + os.sep + day.strftime(fmt)
-	df.to_csv(file_name + '.csv', index=False)
-
+		# save data
+		print(day, flush=True)
+		file_name = data_dir + os.sep + day.strftime(fmt)
+		df.to_csv(file_name + '.csv', index=False)
