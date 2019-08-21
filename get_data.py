@@ -27,7 +27,7 @@ start = input('input start date: ')
 end = input('input end date: ')
 
 start = datetime.strptime(start, '%Y-%m-%d')
-end = datetime.strptime(end, '%Y-%m-%')
+end = datetime.strptime(end, '%Y-%m-%d')
 days = [start + timedelta(i) for i in range((end-start).days + 1)]
 
 for day in days:
