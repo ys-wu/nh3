@@ -41,6 +41,7 @@ while True:
 		days = [start + timedelta(i) for i in range((end-start).days)]
 
 		for day in days:
+			day = datetime(day.year, day.month, day.day) # date to datetime
 			query = {'date_time': {'$gte': day, '$lte': day + timedelta(1)}}
 
 			# load data
