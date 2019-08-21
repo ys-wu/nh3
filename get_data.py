@@ -1,42 +1,48 @@
 
 import os
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timedelta
 from pymongo import MongoClient
 
-
+# data output folder
 data_folder = 'data'
 
-dir_path = os.path.dirname(os.path.realpath(__file__))
-
+# Mongo DB setup
 client = MongoClient("mongodb://localhost:27017/")
 db = client["NH3"]
 col = db["raw_data"]
 
-# get query
-start = input('input start datetime: ')
-end = input('input end datetime: ')
-
+# Create target Directory
+dir_path = os.path.dirname(os.path.realpath(__file__))
 data_dir = dir_path + os.sep + data_folder
 try:
-    # Create target Directory
     os.mkdir(data_dir)
     print("Directory " , data_dir ,  " Created ") 
 except FileExistsError:
     print("Directory " , data_dir ,  " already exists")
 
-file_name = data_dir + os.sep + start + '_' + end + '.csv'
-print(file_name)
-start = datetime.strptime(start, '%Y-%m-%d %H:%M')
-end = datetime.strptime(end, '%Y-%m-%d %H:%M')
-query = {'date_time': {'$gte': start, '$lte': end}}
+# get date
+print('date input formate: %Y-%m-%d, like "2010-03-21"')
+start = input('input start date: ')
+end = input('input end date: ')
 
-# load data
-cursor = col.find(query)
-df =  pd.DataFrame(list(cursor))
+start = datetime.strptime(start, '%Y-%m-%d')
+end = datetime.strptime(end, '%Y-%m-%')
+days = [start + timedelta(i) for i in range((end-start).days + 1)]
 
-# Delete the _id
-if '_id' in df: del df['_id']
+for day in days:
+	file_name = data_dir + os.sep + day + '_' + day + timedelta(1)
+	print(file_name, flush=True)
+	query = {'date_time': {'$gte': day, '$lte': day + timedelta(1)}}
 
-# save to .csv
-df.to_csv(file_name, index=False)
+	# load data
+	cursor = col.find(query)
+	df =  pd.DataFrame(list(cursor))
+
+	# Delete the _id
+	if '_id' in df: del df['_id']
+
+	# save data
+	df.to_pickle(file_name + '.pkl')
+	df.to_pickle(file_name + '.csv', index=False)
+
