@@ -4,8 +4,10 @@ import pandas as pd
 from datetime import datetime, timedelta
 from pymongo import MongoClient
 
-# data output folder
+
 data_folder = 'data'
+fmt = '%Y-%m-%d'
+
 
 # Mongo DB setup
 client = MongoClient("mongodb://localhost:27017/")
@@ -22,12 +24,12 @@ except FileExistsError:
     print("Directory " , data_dir ,  " already exists")
 
 # get date
-print('date input formate: %Y-%m-%d, like "2010-03-21"')
+print('date input formate:' + fmt + 'like "2010-03-21"')
 start = input('input start date: ')
 end = input('input end date: ')
 
-start = datetime.strptime(start, '%Y-%m-%d')
-end = datetime.strptime(end, '%Y-%m-%d')
+start = datetime.strptime(start, fmt)
+end = datetime.strptime(end, fmt)
 days = [start + timedelta(i) for i in range((end-start).days + 1)]
 
 for day in days:
@@ -41,8 +43,8 @@ for day in days:
 	if '_id' in df: del df['_id']
 
 	# save data
-	print(day_str, flush=True)
-	file_name = data_dir + os.sep + day_str
+	print(day, flush=True)
+	file_name = data_dir + os.sep + day.strftime(fmt)
 	df.to_csv(file_name + '.pkl', index=False)
 	df.to_pickle(file_name + '.csv')
 
