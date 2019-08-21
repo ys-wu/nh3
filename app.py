@@ -189,17 +189,18 @@ def main():
 
 @app.route("/update", methods=["POST"])
 def update():
-    print('------------------data ---------------')
-    print(data)
+    # print('------------------data ---------------')
+    # print(data)
     if data:
         return jsonify({'success': True, 'data': data})
     else:
         return jsonify({'success': False})
 
+
 @app.route("/command", methods=["POST"])
 def get_command():
     command = request.form.get("command")
-    on_ff = request.form.get("on_off")
+    on_off = request.form.get("on_off")
     send_command(ser, COMMANDS[command], on_off, 'set')
     print(command, on_ff)
     print(command, on_ff)
