@@ -13,7 +13,7 @@ db = client["NH3"]
 col = db["raw_data"]
 
 # Create target Directory
-dir_path = os.path.dirname(os.path.realpath(__file__))
+dir_path = os.path.dirname(os.path.realpath(__name__))
 data_dir = dir_path + os.sep + data_folder
 try:
     os.mkdir(data_dir)
@@ -31,9 +31,7 @@ end = datetime.strptime(end, '%Y-%m-%d')
 days = [start + timedelta(i) for i in range((end-start).days + 1)]
 
 for day in days:
-	day_str = day.strftime('%Y-%m-%d')
-	next_day_str = (day + timedelta(1)).strftime('%Y-%m-%d')
-	query = {'date_time': {'$gte': day_str, '$lte': next_day_str}}
+	query = {'date_time': {'$gte': day, '$lte': day + timedelta(1)}}
 
 	# load data
 	cursor = col.find(query)
