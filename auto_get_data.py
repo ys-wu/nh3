@@ -29,7 +29,7 @@ files =  glob.glob(data_folder + '/*.csv')
 if files:
 	files.sort()
 	last_date = files[-1].split('/')[-1].split('.')[0]
-	start = datetime.strptime(last_date, fmt)
+	start = datetime.strptime(last_date, fmt).date()
 else:
 	start = datetime.utcnow().date() - timedelta(365)
 
