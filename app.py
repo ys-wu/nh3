@@ -11,7 +11,7 @@ client = pymongo.MongoClient("mongodb://localhost:27017/")
 db = client["NH3"]
 col = db["raw_data"]
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
 
@@ -196,3 +196,12 @@ def update():
     else:
         return jsonify({'success': False})
 
+@app.route("/command", methods=["POST"])
+def get_command():
+    command = request.form.get("command")
+    on_ff = request.form.get("on_off")
+    send_command(ser, COMMANDS[command], on_off, 'set')
+    print(command, on_ff)
+    print(command, on_ff)
+    print(command, on_ff)
+    print(command, on_ff)
