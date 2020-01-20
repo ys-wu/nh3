@@ -150,8 +150,8 @@ def update_data():
     while True:
         date_time = get_datetime(1)
         raw_data = get_data(ser)
-        # print('-------------- raw data ---------------')
-        # print(raw_data)
+        print('-------------- raw data ---------------')
+        print(raw_data)
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
