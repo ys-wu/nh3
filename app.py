@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 CAL = {0: 0, 50: 381.6, 500: 1381.5} # 2018.06 calibration
 COEF = 26 # liquid NH4+ (ppbm) to gas NH3 (pptv)
-INTERVAL = 1 # samnpling time invteval
+INTERVAL = 2 # samnpling time invteval
 
 
 COMMANDS = {'Status': '?',
@@ -122,9 +122,9 @@ def send_command(ser, command, param=None, method='get'):
     return get_data(ser)
 
 
-def get_datetime(interval=10):
-    t0 = int(datetime.datetime.utcnow().timestamp()/interval)
-    while int(datetime.datetime.utcnow().timestamp()/interval) == t0:
+def get_datetime():
+    t0 = int(datetime.datetime.utcnow().timestamp()/INTERVAL)
+    while int(datetime.datetime.utcnow().timestamp()/INTERVAL) == t0:
         time.sleep(0.01)
     return datetime.datetime.utcnow()
              
@@ -150,7 +150,7 @@ def update_data():
     # print('------------- empyt data ---------------')
     # print(data)
     while True:
-        date_time = get_datetime(1)
+        date_time = get_datetime()
         raw_data = get_data(ser)
         print('-------------- raw data ---------------')
         print(raw_data)
@@ -184,21 +184,8 @@ x = threading.Thread(target=update_data)
 x.start()
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/")
 def main():
-    if request.method == "POST":
-        print('************************************')
-        print('************************************')
-        command = request.form.get("commands")
-        on_off = request.form.get("on_off")
-        print(command)
-        print(type(command))
-        print(on_off)
-        print(type(on_off))
-        send_command(ser, COMMANDS[command], on_off, 'set')
-        print(command, on_off)
-        print('************************************')
-        print('************************************')
     return render_template('index.html')
 
 
@@ -210,3 +197,18 @@ def update():
         return jsonify({'success': True, 'data': data})
     else:
         return jsonify({'success': False})
+
+@app.route("/command", methods=["POST"])
+def send_command_():
+    print('************************************')
+    print('************************************')
+    command = request.form.get("commands")
+    on_off = request.form.get("on_off")
+    print(command)
+    print(type(command))
+    print(on_off)
+    print(type(on_off))
+    send_command(ser, COMMANDS[command], on_off, 'set')
+    print(command, on_off)
+    print('************************************')
+    print('************************************')

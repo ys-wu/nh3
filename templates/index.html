@@ -11,12 +11,14 @@
 </head>
 <body>
     <div id="date_time"></div>
-    <div><ul id="data"></ul></div>
-    <div><ul id="status"></ul></div>
+    <div>
+        <ul id="data"></ul>
+        <ul id="status"></ul>
+    </div>
 
-    <form action="/" method="post">
-        <input list="commands" name="commands">
-        <datalist id="commands">
+    <div>
+        <label>commands</label>
+        <select id="commands">
             <option value="Status">Status</option>
             <option value="Mode">Mode</option>
             <option value="Stop">Stop</option>
@@ -27,15 +29,38 @@
             <option value="LiqPump">LiqPump</option>
             <option value="Valve">Valve</option>
             <option value="Fan">Fan</option>
-        </datalist>
-        <input list="on_off" name="on_off">
-        <datalist id="on_off">
+        </select>
+        <select id="on_off">
             <option value=0>Off</option>
             <option value=1>On</option>
-        </datalist>
-        <input type="submit" value="Submit">
-    </form>
-    
+        </select>
+        <button type="submit" id="btn_submit">Submit</button>
+    </div>
+
+    <script type="text/javascript">
+
+        document.getElementById('btn_submit').addEventListener('click', () => {
+
+            console.log('Submit a command.')
+
+            const request = new XMLHttpRequest();
+
+            request.onload = () => {
+                console.log(request.responseText);
+            };
+
+            const commands = document.getElementById('commands').value;
+            const on_off = document.getElementById('on_off').value;
+            const requestData = `commands=${commands}&on_off=${on_off}`;
+            console.log(requestData)
+
+            request.open('post', '/command');
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.send(requestData);
+        });
+
+    </script>
+
     <select id="params"></select>
     <button onclick="plot()">plot</button>
     <div id="plots"></div>
