@@ -184,8 +184,21 @@ x = threading.Thread(target=update_data)
 x.start()
 
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 def main():
+    if request.method == "POST":
+        print('************************************')
+        print('************************************')
+        command = request.form.get("commands")
+        on_off = request.form.get("on_off")
+        print(command)
+        print(type(command))
+        print(on_off)
+        print(type(on_off))
+        send_command(ser, COMMANDS[command], on_off, 'set')
+        print(command, on_off)
+        print('************************************')
+        print('************************************')
     return render_template('index.html')
 
 
@@ -197,19 +210,3 @@ def update():
         return jsonify({'success': True, 'data': data})
     else:
         return jsonify({'success': False})
-
-
-@app.route("/command", methods=["POST"])
-def get_command():
-    print('************************************')
-    print('************************************')
-    command = request.form.get("commands")
-    on_off = request.form.get("on_off")
-    print(command)
-    print(type(command))
-    print(on_off)
-    print(type(on_off))
-    send_command(ser, COMMANDS[command], on_off, 'set')
-    print(command, on_off)
-    print('************************************')
-    print('************************************')
