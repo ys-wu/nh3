@@ -206,18 +206,18 @@ def send_command_():
     try:
         print('************************************')
         print('************************************')
-        command = request.form.get("commands")
-        on_off = request.form.get("on_off")
         get_set = request.form.get("get_set")
+        command = request.form.get("commands")
+        param = request.form.get("param")
         print(command)
         print(type(command))
-        print(on_off)
-        print(type(on_off))
+        print(param)
+        print(type(param))
         if get_set == "get":
             send_command(ser, COMMANDS[command])
         if get_set == "set":
-            send_command(ser, COMMANDS[command], on_off, 'set')
-        print(get_set, command, on_off)
+            send_command(ser, COMMANDS[command], param, 'set')
+        print(get_set, command, param)
         print('************************************')
         print('************************************')
     except:
