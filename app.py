@@ -154,7 +154,7 @@ def update_data():
         raw_data = get_data(ser)
         print('-------------- raw data ---------------')
         print(raw_data)
-        # send_command(ser, "Error")
+        send_command(ser, "Mem")
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
