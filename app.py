@@ -154,6 +154,7 @@ def update_data():
         raw_data = get_data(ser)
         print('-------------- raw data ---------------')
         print(raw_data)
+        # send_command(ser, "Error")
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
@@ -207,12 +208,16 @@ def send_command_():
         print('************************************')
         command = request.form.get("commands")
         on_off = request.form.get("on_off")
+        get_set = request.form.get("get_set")
         print(command)
         print(type(command))
         print(on_off)
         print(type(on_off))
-        send_command(ser, COMMANDS[command], on_off, 'set')
-        print(command, on_off)
+        if get_set == "get":
+            send_command(ser, COMMANDS[command])
+        if get_set == "set":
+            send_command(ser, COMMANDS[command], on_off, 'set')
+        print(get_set, command, on_off)
         print('************************************')
         print('************************************')
     except:

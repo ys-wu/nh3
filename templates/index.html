@@ -18,10 +18,15 @@
 
     <div>
         <label>commands</label>
+        <select id="get_set">
+            <option value="get">get</option>
+            <option value="set">set</option>
+        </select>
         <select id="commands">
+            <option value="Start">Start</option>
+            <option value="Stop">Stop</option>
             <option value="Status">Status</option>
             <option value="Mode">Mode</option>
-            <option value="Stop">Stop</option>
             <option value="Mem">Mem</option>
             <option value="Reset">Reset</option>
             <option value="Data">Data</option>
@@ -29,6 +34,7 @@
             <option value="LiqPump">LiqPump</option>
             <option value="Valve">Valve</option>
             <option value="Fan">Fan</option>
+            <option value="Error">Error</option>
         </select>
         <select id="on_off">
             <option value=0>Off</option>
@@ -49,9 +55,10 @@
                 console.log(request.responseText);
             };
 
+            const get_set = document.getElementById('get_set').value;
             const commands = document.getElementById('commands').value;
             const on_off = document.getElementById('on_off').value;
-            const requestData = `commands=${commands}&on_off=${on_off}`;
+            const requestData = `get_set=${get_set}&commands=${commands}&on_off=${on_off}`;
             console.log(requestData)
 
             request.open('post', '/command');
