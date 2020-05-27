@@ -11,15 +11,22 @@
 </head>
 <body>
     <div id="date_time"></div>
-    <div><ul id="data"></ul></div>
-    <div><ul id="status"></ul></div>
+    <div>
+        <ul id="data" style="float:left; width:300px;"></ul>
+        <ul id="status"></ul>
+    </div>
 
-    <form action="/command" method="post">
-        <input list="commands" name="commands">
-        <datalist id="commands">
+    <div>
+        <label>commands</label>
+        <select id="get_set">
+            <option value="get">get</option>
+            <option value="set">set</option>
+        </select>
+        <select id="commands">
+            <option value="Start">Start</option>
+            <option value="Stop">Stop</option>
             <option value="Status">Status</option>
             <option value="Mode">Mode</option>
-            <option value="Stop">Stop</option>
             <option value="Mem">Mem</option>
             <option value="Reset">Reset</option>
             <option value="Data">Data</option>
@@ -27,15 +34,41 @@
             <option value="LiqPump">LiqPump</option>
             <option value="Valve">Valve</option>
             <option value="Fan">Fan</option>
-        </datalist>
-        <input list="on_off" name="on_off">
-        <datalist id="on_off">
-            <option value=0>Off</option>
-            <option value=1>On</option>
-        </datalist>
-        <input type="submit" value="Submit">
-    </form>
-    
+            <option value="Error">Error</option>
+        </select>
+        <select id="param">
+            <option value=0>0</option>
+            <option value=1>1</option>
+            <option value=2>2</option>
+        </select>
+        <button type="submit" id="btn_submit">Submit</button>
+    </div>
+
+    <script type="text/javascript">
+
+        document.getElementById('btn_submit').addEventListener('click', () => {
+
+            console.log('Submit a command.')
+
+            const request = new XMLHttpRequest();
+
+            request.onload = () => {
+                console.log(request.responseText);
+            };
+
+            const get_set = document.getElementById('get_set').value;
+            const commands = document.getElementById('commands').value;
+            const param = document.getElementById('param').value;
+            const requestData = `get_set=${get_set}&commands=${commands}&param=${param}`;
+            console.log(requestData)
+
+            request.open('post', '/command');
+            request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            request.send(requestData);
+        });
+
+    </script>
+
     <select id="params"></select>
     <button onclick="plot()">plot</button>
     <div id="plots"></div>

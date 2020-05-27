@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 CAL = {0: 0, 50: 381.6, 500: 1381.5} # 2018.06 calibration
 COEF = 26 # liquid NH4+ (ppbm) to gas NH3 (pptv)
-INTERVAL = 1 # samnpling time invteval
+INTERVAL = 2 # samnpling time invteval
 
 
 COMMANDS = {'Status': '?',
@@ -87,8 +87,9 @@ def parse_data(string):
     sep = CHARS['CR'] + CHARS['LF']
     str_arr = string.split(sep)
     str_arr = str_arr[0:-1] # delete last element (empty or incomplete)
+    print(str_arr)
     columns = ['Status', 'temperature', 'airflow', 'Detector1', 'Detector2', 'conductivity']
-    pattern = 'Y;\d{5}.\d{5};\d{2};\d{1};\d{2};[a-zA-Z0-9]{4};\d{4};\d{3};\d{5};\d{5};\d{5};\d{5};\d{5}'
+    pattern = 'Y;\d{5}.\d{5};\d{2};\d{1};\d{2};[a-zA-Z0-9]{4};\d{4};\d{3};\d{5};\d{5};.\d{4};.\d{4};.\d{4}'
     for s in str_arr:
         if s and s[0] == COMMANDS['Data'] and re.fullmatch(pattern, s): 
             x = s.split(';')
@@ -109,6 +110,7 @@ def form_command(command, param=None, method='get'):
 
 def get_data(ser):
     r = ser.read(10000)
+    print(r)
     if r:
         return parse_data(r)
     else:
@@ -120,9 +122,9 @@ def send_command(ser, command, param=None, method='get'):
     return get_data(ser)
 
 
-def get_datetime(interval=10):
-    t0 = int(datetime.datetime.utcnow().timestamp()/interval)
-    while int(datetime.datetime.utcnow().timestamp()/interval) == t0:
+def get_datetime():
+    t0 = int(datetime.datetime.utcnow().timestamp()/INTERVAL)
+    while int(datetime.datetime.utcnow().timestamp()/INTERVAL) == t0:
         time.sleep(0.01)
     return datetime.datetime.utcnow()
              
@@ -148,19 +150,22 @@ def update_data():
     # print('------------- empyt data ---------------')
     # print(data)
     while True:
-        date_time = get_datetime(1)
+        date_time = get_datetime()
         raw_data = get_data(ser)
-        # print('-------------- raw data ---------------')
-        # print(raw_data)
+        print('-------------- raw data ---------------')
+        print(raw_data)
+        send_command(ser, "Mem")
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
             data['NH4'] = func(data['conductivity']) # ppb(aq)
             data['Status'] = get_status(data['Status'])
-            if data['Status']['AirPump']:
+            if data['Status']['AirPump'] or data['airflow'] > 0.8:
                 data['NH3'] = data['NH4']*COEF/data['airflow'] # ppt(g)
+                data['NH3'] = round(data['NH3'], 2)
             else:
                 data['NH3'] = 0
+            data['NH4'] = round(data['NH4'], 2)
             x = copy.deepcopy(data)
             col.insert_one(x)
 
@@ -196,18 +201,24 @@ def update():
     else:
         return jsonify({'success': False})
 
-
 @app.route("/command", methods=["POST"])
-def get_command():
-    print('************************************')
-    print('************************************')
-    command = request.form.get("commands")
-    on_off = request.form.get("on_off")
-    print(command)
-    print(type(command))
-    print(on_off)
-    print(type(on_off))
-    send_command(ser, COMMANDS[command], on_off, 'set')
-    print(command, on_off)
-    print('************************************')
-    print('************************************')
+def send_command_():
+    try:
+        print('************************************')
+        print('************************************')
+        get_set = request.form.get("get_set")
+        command = request.form.get("commands")
+        param = request.form.get("param")
+        print(command)
+        print(type(command))
+        print(param)
+        print(type(param))
+        if get_set == "get":
+            send_command(ser, COMMANDS[command])
+        if get_set == "set":
+            send_command(ser, COMMANDS[command], param, 'set')
+        print(get_set, command, param)
+        print('************************************')
+        print('************************************')
+    except:
+        return("command error!")
