@@ -1,5 +1,5 @@
 var data_set = {};
-var interval = 2;
+var interval = 5;
 var range = 24 * 60 * 60 * 1000;
 var n = 0; // plot id number
 
