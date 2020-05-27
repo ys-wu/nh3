@@ -17,7 +17,7 @@ app = Flask(__name__)
 
 CAL = {0: 0, 50: 381.6, 500: 1381.5} # 2018.06 calibration
 COEF = 26 # liquid NH4+ (ppbm) to gas NH3 (pptv)
-INTERVAL = 2 # samnpling time invteval
+INTERVAL = 5 # samnpling time invteval
 
 
 COMMANDS = {'Status': '?',
