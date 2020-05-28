@@ -152,8 +152,9 @@ def update_data():
     while True:
         date_time = get_datetime()
         raw_data = get_data(ser)
-        print('-------------- raw data ---------------')
+        # print('-------------- raw data ---------------')
         print(raw_data)
+        print('\n')
         send_command(ser, "Mem")
         if raw_data:
             data = raw_data
