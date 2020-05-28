@@ -46,7 +46,8 @@
 
     <script type="text/javascript">
 
-        document.getElementById('btn_submit').addEventListener('click', () => {
+        document.getElementById('btn_submit').addEventListener('click', (e) => {
+            e.preventDefault()
 
             console.log('Submit a command.')
 
