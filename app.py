@@ -159,14 +159,14 @@ def update_data():
         if raw_data:
             data = raw_data
             data['date_time'] = date_time
-            data['NH4'] = func(data['conductivity']) # ppb(aq)
+            # data['NH4'] = func(data['conductivity']) # ppb(aq)
             data['Status'] = get_status(data['Status'])
-            if data['Status']['AirPump'] or data['airflow'] > 0.8:
-                data['NH3'] = data['NH4']*COEF/data['airflow'] # ppt(g)
-                data['NH3'] = round(data['NH3'], 2)
-            else:
-                data['NH3'] = 0
-            data['NH4'] = round(data['NH4'], 2)
+            # if data['Status']['AirPump'] or data['airflow'] > 0.8:
+            #     data['NH3'] = data['NH4']*COEF/data['airflow'] # ppt(g)
+            #     data['NH3'] = round(data['NH3'], 2)
+            # else:
+            #     data['NH3'] = 0
+            # data['NH4'] = round(data['NH4'], 2)
             x = copy.deepcopy(data)
             col.insert_one(x)
 
@@ -201,6 +201,7 @@ def update():
         return jsonify({'success': True, 'data': data})
     else:
         return jsonify({'success': False})
+
 
 @app.route("/command", methods=["POST"])
 def send_command_():
