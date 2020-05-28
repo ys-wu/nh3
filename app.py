@@ -110,7 +110,7 @@ def form_command(command, param=None, method='get'):
 
 def get_data(ser):
     r = ser.read(10000)
-    print(r)
+    # print(r)
     if r:
         return parse_data(r)
     else:
