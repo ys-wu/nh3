@@ -88,13 +88,13 @@ def parse_data(string):
     str_arr = string.split(sep)
     str_arr = str_arr[0:-1] # delete last element (empty or incomplete)
     print(str_arr)
-    columns = ['Status', 'temperature', 'airflow', 'Detector1', 'Detector2', 'conductivity']
+    columns = ['Status', 'temperature', 'airflow', 'Detector1', 'Detector2', 'conductivity', 'NH4', 'NH3']
     pattern = 'Y;\d{5}.\d{5};\d{2};\d{1};\d{2};[a-zA-Z0-9]{4};\d{4};\d{3};\d{5};\d{5};.\d{4};.\d{4,5};.\d{4,5}'
     for s in str_arr:
         if s and s[0] == COMMANDS['Data'] and re.fullmatch(pattern, s): 
             x = s.split(';')
     if 'x' in locals():
-        data = [x[5], int(x[6])/100, int(x[7])/100, int(x[8])/10, int(x[9])/10, int(x[10])/10]
+        data = [x[5], int(x[6])/100, int(x[7])/100, int(x[8])/10, int(x[9])/10, int(x[10])/10, int(x[11])/10, int(x[12])/100]
         return dict(zip(columns, data))
     else:
         return None
