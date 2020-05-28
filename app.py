@@ -222,5 +222,6 @@ def send_command_():
         print(get_set, command, param)
         print('************************************')
         print('************************************')
+        return("OK")
     except:
         return("command error!")
