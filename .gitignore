@@ -1,6 +1,4 @@
-.ipynb_checkpoints/
+.vscode/
+venv/
 __pycache__/
-data/
-static/plotly-latest.min.js
-
 playground/
