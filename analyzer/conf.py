@@ -1,3 +1,7 @@
+import glob
+import time
+import serial
+
 import board
 import busio
 import adafruit_ads1x15.ads1015 as ADS
@@ -6,6 +10,26 @@ import adafruit_mcp4725
 
 
 # AIRRMONIA
+baudrate=19200
+timeout=0.5
+
+def get_port():
+  ports = glob.glob('/dev/ttyUSB*')
+  for p in ports:
+    ser = serial.Serial(p)
+    ser.baudrate = baudrate
+    ser.timeout = timeout
+    time.sleep(2)
+    while True:
+      s = ser.read(1000)
+      if s:
+        while True:
+          s = ser.read(1000)
+          if s:
+            return ser
+
+PORT = get_port()
+
 CAL = {0: 0, 50: 381.6, 500: 1381.5}  # 2018.06 calibration
 COEF = 26  # liquid NH4+ (ppbm) to gas NH3 (pptv)
 INTERVAL = 5  # samnpling time invteval

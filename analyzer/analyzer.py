@@ -1,41 +1,13 @@
-import glob
-import time
-import serial
-
 import conf
 
 
 class Instrument():
 
-  def __init__(self, baudrate=19200, timeout=0.5):
-    self.baudrate = baudrate
-    self.timeout = timeout
+  def __init__(self, port):
+    self.ser = port
 
   def __str__(self):
-    return f'Port: {self.port}.' if self.port else f'Not connected.'
-
-  def check_port(self):
-    ports = glob.glob('/dev/ttyUSB*')
-    for p in ports:
-      ser = serial.Serial(p)
-      ser.baudrate = self.baudrate
-      ser.timeout = self.timeout
-      time.sleep(2)
-      while True:
-        s = ser.read(1000)
-        if s:
-          while True:
-            s = ser.read(1000)
-            if s:
-              self.port = p
-              return
-  
-  def init_port(self):
-    self.check_port()
-    ser = serial.Serial(self.port)
-    ser.baudrate = self.baudrate
-    ser.timeout = self.timeout
-    self.ser = ser
+    return f'Port: {self.ser}.' if self.ser else f'Not connected.'
   
   def _send_command(self, command, param=None, method='get'):
     if method == 'get':
@@ -76,6 +48,5 @@ class Instrument():
 
 
 if __name__ == '__main__':
-  inst = Instrument()
-  inst.init_port()
-  print(inst)
+  inst = Instrument(conf.PORT)
+  print(inst.data)
