@@ -2,8 +2,9 @@
 
 ## Dev Tools
 
-### remote.it access to Raspberry Pi
+### Remote access to Raspberry Pi
 - `remote.it`
+- frp
 
 ### VSCode Remote-SSH
 - `Cmd+Shift-P`
@@ -13,6 +14,12 @@
 ### Markdown 
 - `sudo apt-get install pandoc lynx`
 - `pandoc README.md | lynx -stdin`
+
+### Useful commands
+- `sudo cat /proc/cpuinfo`
+- `getconf LONG_BIT`
+- `sudo ufw allow <port number>`
+- `sudo nestat -npl | grep vnc`
 
 ## Communication
 - `RS232, baudrate=19200`
