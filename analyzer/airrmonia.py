@@ -4,7 +4,7 @@ import re
 import conf
 
 
-class Instrument():
+class Airrmonia():
 
   def __init__(self, port):
     self.ser = port
@@ -23,8 +23,7 @@ class Instrument():
     sep = conf.CHARS['CR'] + conf.CHARS['LF']
     str_arr = string.split(sep)
     str_arr = str_arr[0:-1]  # delete last element (empty or incomplete)
-    print(str_arr)
-    columns = ['Status', 'temperature', 'airflow','Detector1', 'Detector2', 'conductivity', 'NH4', 'NH3']
+    columns = ['Status', 'Temperature', 'AirFlow','Detector1', 'Detector2', 'Conductivity', 'NH4', 'NH3']
     pattern = 'Y;\d{5}.\d{5};\d{2};\d{1};\d{2};[a-zA-Z0-9]{4};\d{4};\d{3};\d{5};\d{5};.\d{4};.\d{4,5};.\d{4,5}'
     for s in str_arr:
       if s and s[0] == conf.COMMANDS['Data'] and re.fullmatch(pattern, s):
@@ -32,8 +31,8 @@ class Instrument():
     if 'x' in locals():
       data = [x[5], int(x[6])/100, int(x[7])/100, int(x[8])/10, int(x[9])/10, int(x[10])/10, int(x[11])/10, int(x[12])/100]
       data = dict(zip(columns, data))
-      data['Status'] = self._parse_status(data['Status'])
-      return data
+      status = self._parse_status(data['Status'])
+      return [data, status]
     else:
       return None
 
@@ -44,9 +43,6 @@ class Instrument():
       return self._parse_data(r)
     else:
       return None
-
-  def publish(self):
-    pass
 
   def _send_command(self, command, param=None):
     if param:
@@ -73,10 +69,10 @@ class Instrument():
   def liquid_pump_off(self):
     self._send_command(conf.COMMANDS['LiqPump'], 0)
 
-  def liquid_span_cal_on(self):
+  def liquid_span_cal_valve_on(self):
     self._send_command(conf.COMMANDS['SetValve'], 1)
 
-  def liquid_span_cal_off(self):
+  def liquid_span_cal_valve_off(self):
     self._send_command(conf.COMMANDS['SetValve'], 0)
 
   def clear_error(self):
@@ -87,7 +83,7 @@ class Instrument():
 
 
 if __name__ == '__main__':
-  inst = Instrument(conf.PORT)
+  inst = Airrmonia(conf.PORT)
   inst.start()
   for i in range(10):
     time.sleep(1)

@@ -69,17 +69,21 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1015(i2c)
 
 # MFC_1 sample flow
-MFC1 = {
+MFC_SAMPLE = {
   'DAC': adafruit_mcp4725.MCP4725(i2c, address=0x63),
   'ADC': AnalogIn(ads, ADS.P2),
   'RANGE': 3.0,
-  'FLOW': 1.0
+  'FLOW': 1.0,
+  'LOWER_LIMIT': 0.75,
+  'UPPER_LIMIT': 1.25,
 }
 
 # MFC_2 zero air flow
-MFC2 = {
+MFC_CAL = {
   'DAC': adafruit_mcp4725.MCP4725(i2c),
   'ADC': AnalogIn(ads, ADS.P1),
   'RANGE': 5.0,
-  'FLOW': 2.0
+  'FLOW': 2.0,
+  'LOWER_LIMIT': 1.5,
+  'UPPER_LIMIT': 2.5,
 }

@@ -25,16 +25,24 @@ class Mfc():
 
 if __name__ == '__main__':
 
-  mfc = Mfc(conf.MFC1['DAC'], conf.MFC1['ADC'], conf.MFC1['RANGE'])
-  mfc.set(conf.MFC1['FLOW'])
+  mfc = Mfc(
+    conf.MFC_SAMPLE['DAC'],
+    conf.MFC_SAMPLE['ADC'],
+    conf.MFC_SAMPLE['RANGE']
+  )
+  mfc.set(conf.MFC_SAMPLE['FLOW'])
   print('MFC sample flow')
   print(mfc)
   print(mfc.flow)
 
   print('*' * 20)
 
-  mfc = Mfc(conf.MFC2['DAC'], conf.MFC2['ADC'], conf.MFC2['RANGE'])
-  mfc.set(conf.MFC2['FLOW'])
+  mfc = Mfc(
+    conf.MFC_CAL['DAC'],
+    conf.MFC_CAL['ADC'],
+    conf.MFC_CAL['RANGE']
+  )
+  mfc.set(conf.MFC_CAL['FLOW'])
   print('MFC zero air flow')
   print(mfc)
   print(mfc.flow)
