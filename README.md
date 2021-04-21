@@ -41,3 +41,7 @@
 - `python3 --version` 3.7.3
 - `python3 -m venv venv`
 - `source venv/bin/activate`
+
+## Redis
+- `sudo apt-get update`
+- `sudo apt-get install redis-server`

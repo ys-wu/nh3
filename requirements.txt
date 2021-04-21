@@ -2,3 +2,4 @@ pyserial==3.5
 adafruit-blinka==6.5.0
 adafruit-circuitpython-ads1x15==2.2.8
 adafruit-circuitpython-mcp4725==1.4.3
+redis==3.5.3
