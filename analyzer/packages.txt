@@ -1,0 +1,17 @@
+Package                          Version
+-------------------------------- -------
+Adafruit-Blinka                  6.4.1  
+adafruit-circuitpython-ads1x15   2.2.8  
+adafruit-circuitpython-busdevice 5.0.6  
+adafruit-circuitpython-mcp4725   1.4.3  
+Adafruit-PlatformDetect          3.4.0  
+Adafruit-PureIO                  1.1.8  
+pip                              18.1   
+pkg-resources                    0.0.0  
+pyftdi                           0.52.9 
+pyserial                         3.5    
+pyusb                            1.1.1  
+rpi-ws281x                       4.2.6  
+RPi.GPIO                         0.7.0  
+setuptools                       40.8.0 
+sysv-ipc                         1.1.0  
