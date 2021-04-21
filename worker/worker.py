@@ -1,6 +1,9 @@
 import sys, os, configparser
 from time import sleep
 from datetime import datetime
+import json
+
+import redis
 
 import conf
 
@@ -8,7 +11,7 @@ from airrmonia import Airrmonia
 from mfc import Mfc
 from meassys import MeasSys
 
-from helpers import is_new_start
+from helpers import is_new_start, push_to_redis
 
 
 config = configparser.ConfigParser()
@@ -20,6 +23,12 @@ LOCAL_PUBLISH_INTERVAL = int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL'])
 LOCAL_RECORD_INTERVAL = int(config['SETTINGS']['LOCAL_RECORD_INTERVAL'])
 REMOTE_PUBLISH_INTERVAL = int(config['SETTINGS']['REMOTE_PUBLISH_INTERVAL'])
 REMOTE_BACKUP_INTERVAL = int(config['SETTINGS']['REMOTE_BACKUP_INTERVAL'])
+
+r = redis.Redis(
+  host=conf.REDIS['HOST'],
+  port=conf.REDIS['PORT'],
+  db=conf.REDIS['DB'],
+)
 
 airrmonia = Airrmonia(conf.PORT)
 mfc_sample = Mfc(
@@ -46,17 +55,19 @@ gen_remote_backup = is_new_start(REMOTE_BACKUP_INTERVAL)
 def main():
   while True:
     sleep(0.01)
-    dttm = datetime.utcnow()
 
     if next(gen_local_pub):
+      dttm = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
       data = meassys.data
 
       if data is None:
         print(dttm, 'No data.')
         continue
-
+      
       data, status, errors = data
-      print(dttm, (data, status, errors))
+      data = {'dttm': dttm, 'data': data, 'status': status, 'errors': errors}
+      data = json.dumps(data)
+      push_to_redis(r, 'data', data)
 
 
 if __name__ == '__main__':
