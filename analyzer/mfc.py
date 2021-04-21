@@ -1,8 +1,4 @@
-import board
-import busio
-import adafruit_ads1x15.ads1015 as ADS
-from adafruit_ads1x15.analog_in import AnalogIn
-import adafruit_mcp4725
+import conf
 
 
 class Mfc():
@@ -16,7 +12,7 @@ class Mfc():
     self.dac.normalized_value = 1.0
 
   def __str__(self):
-    return
+    return f'MFC: 0-{self.flow_range} L/min, 0-{self.volt_range} volts'
 
   def set(self, value):
     value = value if value <= self.flow_range else self.flow_range
@@ -24,15 +20,21 @@ class Mfc():
   
   @property
   def flow(self):
-    return self.adc.voltage / self.volt_range * self.flow_range
+    return round(self.adc.voltage / self.volt_range * self.flow_range, 3)
 
 
 if __name__ == '__main__':
-  i2c = busio.I2C(board.SCL, board.SDA)
-  dac = adafruit_mcp4725.MCP4725(i2c)
-  ads = ADS.ADS1015(i2c)
-  adc = AnalogIn(ads, ADS.P1)
 
-  mfc = Mfc(dac, adc, 3)
-  mfc.set(2)
+  mfc = Mfc(conf.MFC1['DAC'], conf.MFC1['ADC'], conf.MFC1['RANGE'])
+  mfc.set(conf.MFC1['FLOW'])
+  print('MFC sample flow')
+  print(mfc)
+  print(mfc.flow)
+
+  print('*' * 20)
+
+  mfc = Mfc(conf.MFC2['DAC'], conf.MFC2['ADC'], conf.MFC2['RANGE'])
+  mfc.set(conf.MFC2['FLOW'])
+  print('MFC zero air flow')
+  print(mfc)
   print(mfc.flow)
