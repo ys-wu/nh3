@@ -9,6 +9,14 @@ from adafruit_ads1x15.analog_in import AnalogIn
 import adafruit_mcp4725
 
 
+# Redis
+REDIS = {
+  'HOST': 'localhost',
+  'PORT': 6379,
+  'DB': 0,
+}
+
+
 # AIRRMONIA
 baudrate=19200
 timeout=0.5
@@ -63,6 +71,7 @@ STATUS_BITS = {
   'DataMemory': 7,
   'CalMemory': 8
 }
+
 
 # MFC
 i2c = busio.I2C(board.SCL, board.SDA)
