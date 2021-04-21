@@ -20,13 +20,9 @@ def get_port():
     ser.baudrate = baudrate
     ser.timeout = timeout
     time.sleep(2)
-    while True:
-      s = ser.read(1000)
-      if s:
-        while True:
-          s = ser.read(1000)
-          if s:
-            return ser
+    while ser.read(1000):
+      return ser
+  return None
 
 PORT = get_port()
 
