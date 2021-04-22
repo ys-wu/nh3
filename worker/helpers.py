@@ -24,6 +24,11 @@ def is_new_start(interval):
       yield False
 
 
+def status_setter(meassys, r):
+  while r.llen('status'):
+    meassys.status = r.rpop('status').decode('utf-8')
+
+
 def push_to_redis(r, queue, data, limit=100):
   r.lpush(queue, data)
   while r.llen(queue) > limit:

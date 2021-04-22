@@ -10,23 +10,28 @@ r = redis.Redis(
   db=conf.REDIS['DB'],
 )
 
-commands = [
-  'stop',
-  'start',
-  'air_pump_off',
-  'air_pump_on',
-  'liquid_pump_off',
-  'liquid_pump_on',
-  'cal_gas_zero_start',
-  'cal_gas_zero_stop',
-  'cal_liquid_span_start',
-  'cal_liquid_span_stop',
-  'clear_error',
-  'clear_memory',
-  'stop',
-]
+# commands = [
+#   'stop',
+#   'start',
+#   'air_pump_off',
+#   'air_pump_on',
+#   'liquid_pump_off',
+#   'liquid_pump_on',
+#   'cal_gas_zero_start',
+#   'cal_gas_zero_stop',
+#   'cal_liquid_span_start',
+#   'cal_liquid_span_stop',
+#   'clear_error',
+#   'clear_memory',
+#   'stop',
+# ]
 
-for command in commands:
+# for command in commands:
+#   time.sleep(5)
+#   print(command)
+#   r.lpush('commands', command)
+
+for status in ['x','y', 'z', 'Sampling']:
   time.sleep(5)
-  print(command)
-  r.lpush('commands', command)
+  print(status)
+  r.lpush('status', status)

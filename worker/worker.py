@@ -14,6 +14,7 @@ from meassys import MeasSys
 from helpers import (
   get_utc_time,
   is_new_start,
+  status_setter,
   push_to_redis,
   command_handler
 )
@@ -64,6 +65,7 @@ def main():
   while True:
     sleep(0.01)
     command_handler(r, meassys)
+    status_setter(meassys, r)
 
     if next(gen_local_pub):
       dttm = get_utc_time()
@@ -87,7 +89,7 @@ if __name__ == '__main__':
   except KeyboardInterrupt:
     meassys.stop()
     sleep(0.5)
-    print()
+    print(' ')
     print(get_utc_time(), 'Interrupted')
     try:
       sys.exit(0)
