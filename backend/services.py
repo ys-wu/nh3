@@ -22,6 +22,14 @@ def get_data():
     return {'data': None}
 
 
+def get_error():
+  if r.llen('errors') > 0:
+    error = r.lpop('errors').decode('utf-8')
+    return {'error': error}
+  else:
+    return {'message': 'no errors'}
+
+
 def send_command(command):
   if command in conf.COMMANDS:
     r.lpush('commands', command)

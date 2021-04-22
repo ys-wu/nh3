@@ -2,6 +2,7 @@ from flask import Flask, request
 
 from services import (
   get_data,
+  get_error,
   send_command,
   send_status,
 )
@@ -14,6 +15,12 @@ app = Flask(__name__)
 def data():
   data = get_data()
   return data
+
+
+@app.route('/error')
+def error():
+  error = get_error()
+  return error
 
 
 @app.route('/command', methods=['POST'])

@@ -5,7 +5,7 @@ from serial.serialutil import SerialException
 
 import conf
 
-from helpers import get_utc_time
+from helpers import get_utc_time, push_to_redis
 
 
 class Airrmonia():
@@ -13,7 +13,7 @@ class Airrmonia():
   def __init__(self, port, r):
     if port is None:
       print(get_utc_time(), 'cannot get a serial port.')
-      r.lpush('errors', 'SerialPort')
+      push_to_redis(r, 'errors', 'SerialPort')
     self.ser = port
 
   def __str__(self):
