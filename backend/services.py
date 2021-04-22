@@ -28,3 +28,11 @@ def send_command(command):
     return True
   else:
     return False
+
+
+def send_status(status):
+  if status in conf.STATUS:
+    r.lpush('status', status)
+    return True
+  else:
+    return False

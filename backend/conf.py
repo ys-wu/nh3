@@ -18,3 +18,11 @@ COMMANDS = [
     'clear_error',
     'clear_memory',
 ]
+
+STATUS =[
+    'Idle',
+    'Sampling',
+    'GasZero',
+    'LiqSpan',
+    'Servicing',
+]

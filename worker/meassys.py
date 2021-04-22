@@ -41,23 +41,35 @@ class MeasSys():
 
   def cal_gas_zero_start(self):
     self.mfc_cal.set(conf.MFC_CAL['FLOW'])
-    self.status = 'GasZero'
+    if self.status.startswith('Servicing'):
+      self.status == ('Servicing')
+    else:
+      self.status = 'GasZero'
 
   def cal_gas_zero_stop(self):
     self.mfc_cal.set(0)
-    self.status = 'Sampling'
+    if not self.status.startswith('Servicing'):
+      self.status == ('Servicing')
+    else:
+      self.status = 'Sampling'
 
   def cal_liquid_span_start(self):
     self.air_pump_off()
     sleep(1)
     self.airrmonia.liquid_span_cal_valve_on()
-    self.status = 'LiqSpan'
+    if not self.status.startswith('Servicing'):
+      self.status == ('Servicing')
+    else:
+      self.status = 'LiqSpan'
 
   def cal_liquid_span_stop(self):
     self.airrmonia.liquid_span_cal_valve_off()
     sleep(1)
     self.air_pump_on()
-    self.status = 'Sampling'
+    if not self.status.startswith('Servicing'):
+      self.status == ('Servicing')
+    else:
+      self.status = 'Sampling'
   
   def clear_error(self):
     self.airrmonia.clear_error()
