@@ -1,4 +1,5 @@
 from time import sleep
+import json
 
 import redis
 
@@ -37,6 +38,23 @@ r = redis.Redis(
 #   print(status)
 #   r.lpush('status', status)
 
+for i in range(30):
+  sleep(0.5)
+  while r.llen('data') > 1:
+    r.rpop('data')
+  if r.llen('data') > 0:
+    print(r.rpop('data').decode('utf-8'))
+
+r.lpush('settings', json.dumps({'local_publish_interval': 1}))
+
+for i in range(30):
+  sleep(0.5)
+  while r.llen('data') > 1:
+    r.rpop('data')
+  if r.llen('data') > 0:
+    print(r.rpop('data').decode('utf-8'))
+
+r.lpush('settings', json.dumps({'local_publish_interval': 2}))
 
 while True:
   sleep(1)

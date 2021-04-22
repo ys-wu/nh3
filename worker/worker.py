@@ -16,7 +16,7 @@ from helpers import (
   SETTINGS,
   GENS,
   get_utc_time,
-  is_new_start,
+  setting_handler,
   status_setter,
   push_to_redis,
   command_handler
@@ -58,6 +58,7 @@ def main():
     sleep(0.01)
     command_handler(r, meassys)
     status_setter(meassys, r)
+    setting_handler(r)
 
     if next(GENS['local_pub']):
       dttm = get_utc_time()

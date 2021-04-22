@@ -8,6 +8,19 @@ import redis
 import conf
 
 
+def clear_up_redis(r):
+  while r.llen('data'):
+    r.rpop('data')
+  while r.llen('commands'):
+    r.rpop('commands')
+  while r.llen('status'):
+    r.rpop('status')
+  while r.llen('errors'):
+    r.rpop('errors')
+  while r.llen('settings'):
+    r.rpop('settings')
+
+
 config = ConfigParser()
 config.read('settings.ini')
 SETTINGS = {
@@ -40,27 +53,28 @@ GENS = {
 }
 
 def setting_handler(r):
-  setting_mapper = {
-    'auto_start': 
-      lambda v: config.set('SETTINGS', 'AUTO_START', v), 
-    'auto_publish':
-      lambda v: config.set('SETTINGS', 'AUTO_PUBLISH', v),
-    'auto_backup':
-      lambda v: config.set('SETTINGS', 'AUTO_BACKUP', v),
-    'local_publish_interval':
-      lambda v: config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(v)),
-    'local_record_interval':
-      lambda v: config.set('SETTINGS', 'LOCAL_RECORD_INTERVAL', str(v)),
-    'remote_publish_interval':
-      lambda v: config.set('SETTINGS', 'REMOTE_PUBLISH_INTERVAL', str(v)),
-    'remote_backup_interval':
-      lambda v: config.set('SETTINGS', 'REMOTE_BACKUP_INTERVAL', str(v)),
-  }
   while r.llen('settings'):
     for key, value in json.loads(r.rpop('settings')).items():
-      setting_mapper[key](str(value))
-      with open('settings.ini', 'w') as configfile:
-        config.write(configfile)
+      if key == 'auto_start':
+        config.set('SETTINGS', 'AUTO_START', str(value))
+      elif key == 'auto_publish':
+        config.set('SETTINGS', 'AUTO_PUBLISH', str(value))
+      elif key == 'auto_backup':
+        config.set('SETTINGS', 'AUTO_BACKUP', str(value))
+      elif key == 'local_publish_interval':
+        config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(value))
+        GENS['local_pub'] = is_new_start(value)
+      elif key == 'local_record_interval':
+        config.set('SETTINGS', 'LOCAL_RECORD_INTERVAL', str(value))
+        GENS['local_record'] = is_new_start(value)
+      elif key == 'remote_publish_interval':
+        config.set('SETTINGS', 'REMOTE_PUBLISH_INTERVAL', str(value))
+        GENS['remote_publish'] = is_new_start(value)
+      elif key == 'remote_backup_interval':
+        config.set('SETTINGS', 'REMOTE_BACKUP_INTERVAL', str(value))
+        GENS['remote_backup'] = is_new_start(value)
+    with open('settings.ini', 'w') as configfile:
+      config.write(configfile)
 
 
 def get_utc_time():
@@ -124,8 +138,10 @@ if __name__ == '__main__':
   #   print(r.rpop('data'))
 
   settings = [
-    {'auto_start': True, 'local_publish_interval': 2},
-    {'remote_backup_interval': 3600}
+    {'auto_start': False, 'local_publish_interval': 2},
+    {'remote_backup_interval': 3600},
+    {'auto_publish': False, 'auto_backup': False, 'local_record_interval':10},
+    {'remote_publish_interval': 60}
   ]
   for x in settings:
     r.lpush('settings', json.dumps(x))
