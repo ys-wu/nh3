@@ -1,8 +1,14 @@
 from flask import Flask, request
 
+from services import (
+  get_data,
+)
+
+
 app = Flask(__name__)
 
 
 @app.route('/data')
 def hello_world():
-  return {'data':'data'}
+  data = get_data()
+  return data
