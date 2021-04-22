@@ -36,7 +36,10 @@ r = redis.Redis(
   db=conf.REDIS['DB'],
 )
 
-airrmonia = Airrmonia(conf.PORT)
+airrmonia = Airrmonia(conf.PORT, r)
+print(get_utc_time(), 'init Airrmonia.')
+print(airrmonia)
+
 mfc_sample = Mfc(
   conf.MFC_SAMPLE['NAME'],
   conf.MFC_SAMPLE['DAC'],

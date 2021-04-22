@@ -10,7 +10,10 @@ from helpers import get_utc_time
 
 class Airrmonia():
 
-  def __init__(self, port):
+  def __init__(self, port, r):
+    if port is None:
+      print(get_utc_time(), 'cannot get a serial port.')
+      r.lpush('errors', 'SerialPort')
     self.ser = port
 
   def __str__(self):
@@ -91,12 +94,12 @@ class Airrmonia():
     self._send_command(conf.COMMANDS['Mem'])
 
 
-if __name__ == '__main__':
-  inst = Airrmonia(conf.PORT)
-  inst.start()
-  for i in range(10):
-    time.sleep(1)
-    print(inst.data)
-  inst.stop()
-  time.sleep(1)
-  print(inst.data)
+# if __name__ == '__main__':
+#   inst = Airrmonia(conf.PORT)
+#   inst.start()
+#   for i in range(10):
+#     time.sleep(1)
+#     print(inst.data)
+#   inst.stop()
+#   time.sleep(1)
+#   print(inst.data)
