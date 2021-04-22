@@ -2,7 +2,7 @@ from flask import Flask, request
 
 from services import (
   get_data,
-  send_commands,
+  send_command,
 )
 
 
