@@ -1,4 +1,4 @@
-import time
+from time import sleep
 
 import redis
 
@@ -28,11 +28,19 @@ r = redis.Redis(
 # ]
 
 # for command in commands:
-#   time.sleep(5)
+#   sleep(5)
 #   print(command)
 #   r.lpush('commands', command)
 
-for status in ['x','y', 'z', 'Sampling']:
-  time.sleep(5)
-  print(status)
-  r.lpush('status', status)
+# for status in ['x','y', 'z', 'Sampling']:
+#   sleep(5)
+#   print(status)
+#   r.lpush('status', status)
+
+
+while True:
+  sleep(1)
+  # while r.llen('data') > 1:
+  #   r.rpop('data')
+  if r.llen('data') > 0:
+    print(r.rpop('data').decode('utf-8'))

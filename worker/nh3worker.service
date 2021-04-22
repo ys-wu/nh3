@@ -1,0 +1,11 @@
+[Unit]
+Description=NH3 measurement worker
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/nh3/worker/
+ExecStart=/home/pi/nh3/venv/bin/python /home/pi/nh3/worker/worker.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
