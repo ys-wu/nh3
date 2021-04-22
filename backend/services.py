@@ -6,9 +6,9 @@ import conf
 
 
 r = redis.Redis(
-    host=conf.REDIS['HOST'],
-    port=conf.REDIS['PORT'],
-    db=conf.REDIS['DB'],
+  host=conf.REDIS['HOST'],
+  port=conf.REDIS['PORT'],
+  db=conf.REDIS['DB'],
 )
 
 
@@ -20,3 +20,11 @@ def get_data():
     return json.loads(data)
   else:
     return {'data': None}
+
+
+def send_command(command):
+  if command in conf.COMMANDS:
+    r.lpush('commands', command)
+    return True
+  else:
+    return False
