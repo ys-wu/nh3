@@ -57,3 +57,7 @@
 ## Redis
 - `sudo apt-get update`
 - `sudo apt-get install redis-server`
+
+## React
+- `sudo apt-get install nodejs npm`
+- `sudo npm install -g npx`
