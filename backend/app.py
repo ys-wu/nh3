@@ -5,6 +5,7 @@ from services import (
   get_error,
   send_command,
   send_status,
+  send_settings,
 )
 
 
@@ -39,3 +40,12 @@ def status():
     return {'message': 'received a status'}
   else:
     return {'message': 'bad status'}
+
+
+@app.route('/settings', methods=['POST'])
+def settings():
+  settings = request.form
+  if send_settings(settings):
+    return {'message': 'received settings'}
+  else:
+    return {'message': 'bad settings'}

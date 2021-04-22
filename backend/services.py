@@ -44,3 +44,11 @@ def send_status(status):
     return True
   else:
     return False
+
+
+def send_settings(settings):
+  if set(settings.keys()).issubset(set(conf.SETTINGS)):
+    r.lpush('settings', json.dumps(settings))
+    return True
+  else:
+    return False

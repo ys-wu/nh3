@@ -24,13 +24,20 @@ def clear_up_redis(r):
 config = ConfigParser()
 config.read('settings.ini')
 SETTINGS = {
-  'AUTO_START': True if config['SETTINGS']['AUTO_START'] == 'True' else False,
-  'AUTO_PUBLISH': True if config['SETTINGS']['AUTO_PUBLISH'] == 'True' else False,
-  'AUTO_BACKUP': True if config['SETTINGS']['AUTO_BACKUP'] == 'True' else False,
-  'LOCAL_PUBLISH_INTERVAL': int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL']),
-  'LOCAL_RECORD_INTERVAL': int(config['SETTINGS']['LOCAL_RECORD_INTERVAL']),
-  'REMOTE_PUBLISH_INTERVAL': int(config['SETTINGS']['REMOTE_PUBLISH_INTERVAL']),
-  'REMOTE_BACKUP_INTERVAL': int(config['SETTINGS']['REMOTE_BACKUP_INTERVAL']),
+  'AUTO_START':
+    True if config['SETTINGS']['AUTO_START'].lower() == 'true' else False,
+  'AUTO_PUBLISH':
+    True if config['SETTINGS']['AUTO_PUBLISH'].lower() == 'true' else False,
+  'AUTO_BACKUP':
+    True if config['SETTINGS']['AUTO_BACKUP'].lower() == 'true' else False,
+  'LOCAL_PUBLISH_INTERVAL':
+    int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL']),
+  'LOCAL_RECORD_INTERVAL':
+    int(config['SETTINGS']['LOCAL_RECORD_INTERVAL']),
+  'REMOTE_PUBLISH_INTERVAL':
+    int(config['SETTINGS']['REMOTE_PUBLISH_INTERVAL']),
+  'REMOTE_BACKUP_INTERVAL':
+    int(config['SETTINGS']['REMOTE_BACKUP_INTERVAL']),
 }
 
 def is_new_start(interval):

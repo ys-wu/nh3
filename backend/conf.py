@@ -19,10 +19,20 @@ COMMANDS = [
     'clear_memory',
 ]
 
-STATUS =[
+STATUS = [
     'Idle',
     'Sampling',
     'GasZero',
     'LiqSpan',
     'Servicing',
+]
+
+SETTINGS = [
+    'auto_start',
+    'auto_publish',
+    'auto_backup',
+    'local_publish_interval',
+    'local_record_interval',
+    'remote_publish_interval',
+    'remote_backup_interval',
 ]
