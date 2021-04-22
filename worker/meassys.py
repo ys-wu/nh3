@@ -1,4 +1,4 @@
-import time
+from time import sleep
 
 import conf
 
@@ -49,11 +49,13 @@ class MeasSys():
 
   def cal_liquid_span_start(self):
     self.air_pump_off()
+    sleep(1)
     self.airrmonia.liquid_span_cal_valve_on()
     self.status = 'LiqSpan'
 
   def cal_liquid_span_stop(self):
     self.airrmonia.liquid_span_cal_valve_off()
+    sleep(1)
     self.air_pump_on()
     self.status = 'Sampling'
   
@@ -92,12 +94,14 @@ if __name__ == '__main__':
   airrmonia = Airrmonia(conf.PORT)
 
   mfc_sample = Mfc(
+    conf.MFC_SAMPLE['NAME'],
     conf.MFC_SAMPLE['DAC'],
     conf.MFC_SAMPLE['ADC'],
     conf.MFC_SAMPLE['RANGE']
   )
 
   mfc_cal = Mfc(
+    conf.MFC_CAL['NAME'],
     conf.MFC_CAL['DAC'],
     conf.MFC_CAL['ADC'],
     conf.MFC_CAL['RANGE']
@@ -108,9 +112,9 @@ if __name__ == '__main__':
   meassys.start()
 
   for i in range(10):
-    time.sleep(1)
+    sleep(1)
     print(meassys.data)
 
   meassys.stop()
-  time.sleep(1)
+  sleep(1)
   print(meassys.data) 

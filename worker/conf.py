@@ -79,6 +79,7 @@ ads = ADS.ADS1015(i2c)
 
 # MFC_1 sample flow
 MFC_SAMPLE = {
+  'NAME': 'sample',
   'DAC': adafruit_mcp4725.MCP4725(i2c, address=0x63),
   'ADC': AnalogIn(ads, ADS.P2),
   'RANGE': 3.0,
@@ -89,6 +90,7 @@ MFC_SAMPLE = {
 
 # MFC_2 zero air flow
 MFC_CAL = {
+  'NAME': 'cal',
   'DAC': adafruit_mcp4725.MCP4725(i2c),
   'ADC': AnalogIn(ads, ADS.P1),
   'RANGE': 5.0,

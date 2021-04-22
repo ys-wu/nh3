@@ -6,6 +6,10 @@ import redis
 import conf
 
 
+def get_utc_time():
+  return datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+
+
 def is_new_start(interval):
 
   # check whole seconds
@@ -24,6 +28,26 @@ def push_to_redis(r, queue, data, limit=100):
   r.lpush(queue, data)
   while r.llen(queue) > limit:
     r.rpop(queue)
+
+
+def command_handler(r, meassys):
+  command_mapper = {
+    'start': meassys.start,
+    'stop': meassys.stop,
+    'air_pump_on': meassys.air_pump_on,
+    'air_pump_off': meassys.air_pump_off,
+    'liquid_pump_on': meassys.liquid_pump_on,
+    'liquid_pump_off': meassys.liquid_pump_off,
+    'cal_gas_zero_start': meassys.cal_gas_zero_start,
+    'cal_gas_zero_stop': meassys.cal_gas_zero_stop,
+    'cal_liquid_span_start': meassys.cal_liquid_span_start,
+    'cal_liquid_span_stop': meassys.cal_liquid_span_stop,
+    'clear_error': meassys.clear_error,
+    'clear_memory': meassys.clear_memory,
+  }
+  while r.llen('commands'):
+    command = r.rpop('commands').decode('utf-8')
+    command_mapper[command]()
 
 
 if __name__ == '__main__':

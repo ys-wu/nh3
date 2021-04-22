@@ -1,7 +1,11 @@
 import time
 import re
 
+from serial.serialutil import SerialException
+
 import conf
+
+from helpers import get_utc_time
 
 
 class Airrmonia():
@@ -38,15 +42,20 @@ class Airrmonia():
 
   @property
   def data(self):
-    r = self.ser.read(10000).decode('utf-8')
+    try:
+      r = self.ser.read(10000).decode('utf-8')
+    except SerialException:
+      print('SerialException')
+      return None
     if r:
       return self._parse_data(r)
     else:
       return None
 
   def _send_command(self, command, param=None):
-    if param:
-      s = conf.CHARS['STX'] + command + param + CHARS['CR']
+    print(f'{get_utc_time()} send serial command ({command}), param ({param})')
+    if param is not None:
+      s = conf.CHARS['STX'] + command + str(param) + conf.CHARS['CR']
     else:
       s = conf.CHARS['Esc'] + command
     self.ser.write(s.encode('utf-8'))
@@ -70,10 +79,10 @@ class Airrmonia():
     self._send_command(conf.COMMANDS['LiqPump'], 0)
 
   def liquid_span_cal_valve_on(self):
-    self._send_command(conf.COMMANDS['SetValve'], 1)
+    self._send_command(conf.COMMANDS['Valve'], 1)
 
   def liquid_span_cal_valve_off(self):
-    self._send_command(conf.COMMANDS['SetValve'], 0)
+    self._send_command(conf.COMMANDS['Valve'], 0)
 
   def clear_error(self):
     self._send_command(conf.COMMANDS['Error'])

@@ -11,7 +11,12 @@ from airrmonia import Airrmonia
 from mfc import Mfc
 from meassys import MeasSys
 
-from helpers import is_new_start, push_to_redis
+from helpers import (
+  get_utc_time,
+  is_new_start,
+  push_to_redis,
+  command_handler
+)
 
 
 config = configparser.ConfigParser()
@@ -32,11 +37,13 @@ r = redis.Redis(
 
 airrmonia = Airrmonia(conf.PORT)
 mfc_sample = Mfc(
+  conf.MFC_SAMPLE['NAME'],
   conf.MFC_SAMPLE['DAC'],
   conf.MFC_SAMPLE['ADC'],
   conf.MFC_SAMPLE['RANGE']
 )
 mfc_cal = Mfc(
+  conf.MFC_CAL['NAME'],
   conf.MFC_CAL['DAC'],
   conf.MFC_CAL['ADC'],
   conf.MFC_CAL['RANGE']
@@ -44,6 +51,7 @@ mfc_cal = Mfc(
 meassys = MeasSys(airrmonia, mfc_sample, mfc_cal)
 
 if AUTO_START:
+  print(get_utc_time(), 'auto start')
   meassys.start()
 
 gen_local_pub = is_new_start(LOCAL_PUBLISH_INTERVAL)
@@ -55,9 +63,10 @@ gen_remote_backup = is_new_start(REMOTE_BACKUP_INTERVAL)
 def main():
   while True:
     sleep(0.01)
+    command_handler(r, meassys)
 
     if next(gen_local_pub):
-      dttm = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+      dttm = get_utc_time()
       data = meassys.data
 
       if data is None:
@@ -66,6 +75,8 @@ def main():
       
       data, status, errors = data
       data = {'dttm': dttm, 'data': data, 'status': status, 'errors': errors}
+      print(dttm, data['data']['Status'], data['status'])
+      
       data = json.dumps(data)
       push_to_redis(r, 'data', data)
 
@@ -76,7 +87,8 @@ if __name__ == '__main__':
   except KeyboardInterrupt:
     meassys.stop()
     sleep(0.5)
-    print(datetime.utcnow(), 'Interrupted')
+    print()
+    print(get_utc_time(), 'Interrupted')
     try:
       sys.exit(0)
     except SystemExit:
