@@ -42,6 +42,18 @@
 - `python3 -m venv venv`
 - `source venv/bin/activate`
 
+### VScode config
+- pylance
+```
+{
+  "python.pythonPath": "venv/bin/python3",
+  "python.analysis.extraPaths": [
+    "./worker",
+    "./backend",
+  ],
+}
+```
+
 ## Redis
 - `sudo apt-get update`
 - `sudo apt-get install redis-server`
