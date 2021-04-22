@@ -13,6 +13,8 @@ from mfc import Mfc
 from meassys import MeasSys
 
 from helpers import (
+  SETTINGS,
+  GENS,
   get_utc_time,
   is_new_start,
   status_setter,
@@ -20,16 +22,6 @@ from helpers import (
   command_handler
 )
 
-
-config = ConfigParser()
-config.read('settings.ini')
-AUTO_START = True if config['SETTINGS']['AUTO_START'] == 'True' else False
-AUTO_PUBLISH = True if config['SETTINGS']['AUTO_PUBLISH'] == 'True' else False
-AUTO_BACKUP = True if config['SETTINGS']['AUTO_BACKUP'] == 'True' else False
-LOCAL_PUBLISH_INTERVAL = int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL'])
-LOCAL_RECORD_INTERVAL = int(config['SETTINGS']['LOCAL_RECORD_INTERVAL'])
-REMOTE_PUBLISH_INTERVAL = int(config['SETTINGS']['REMOTE_PUBLISH_INTERVAL'])
-REMOTE_BACKUP_INTERVAL = int(config['SETTINGS']['REMOTE_BACKUP_INTERVAL'])
 
 r = redis.Redis(
   host=conf.REDIS['HOST'],
@@ -53,16 +45,12 @@ mfc_cal = Mfc(
   conf.MFC_CAL['ADC'],
   conf.MFC_CAL['RANGE']
 )
+
 meassys = MeasSys(airrmonia, mfc_sample, mfc_cal)
 
-if AUTO_START:
+if SETTINGS['AUTO_START']:
   print(get_utc_time(), 'auto start')
   meassys.start()
-
-gen_local_pub = is_new_start(LOCAL_PUBLISH_INTERVAL)
-gen_local_record = is_new_start(LOCAL_RECORD_INTERVAL)
-gen_remote_pub = is_new_start(REMOTE_PUBLISH_INTERVAL)
-gen_remote_backup = is_new_start(REMOTE_BACKUP_INTERVAL)
 
 
 def main():
@@ -71,7 +59,7 @@ def main():
     command_handler(r, meassys)
     status_setter(meassys, r)
 
-    if next(gen_local_pub):
+    if next(GENS['local_pub']):
       dttm = get_utc_time()
       data = meassys.data
 

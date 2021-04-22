@@ -10,14 +10,17 @@ import conf
 
 config = ConfigParser()
 config.read('settings.ini')
-
-
-def get_utc_time():
-  return datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
-
+SETTINGS = {
+  'AUTO_START': True if config['SETTINGS']['AUTO_START'] == 'True' else False,
+  'AUTO_PUBLISH': True if config['SETTINGS']['AUTO_PUBLISH'] == 'True' else False,
+  'AUTO_BACKUP': True if config['SETTINGS']['AUTO_BACKUP'] == 'True' else False,
+  'LOCAL_PUBLISH_INTERVAL': int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL']),
+  'LOCAL_RECORD_INTERVAL': int(config['SETTINGS']['LOCAL_RECORD_INTERVAL']),
+  'REMOTE_PUBLISH_INTERVAL': int(config['SETTINGS']['REMOTE_PUBLISH_INTERVAL']),
+  'REMOTE_BACKUP_INTERVAL': int(config['SETTINGS']['REMOTE_BACKUP_INTERVAL']),
+}
 
 def is_new_start(interval):
-
   # check whole seconds
   t0 = int(datetime.now().timestamp())
 
@@ -28,6 +31,40 @@ def is_new_start(interval):
       t0 = t1
     else:
       yield False
+
+GENS = {
+  'local_pub': is_new_start(SETTINGS['LOCAL_PUBLISH_INTERVAL']),
+  'local_record': is_new_start(SETTINGS['LOCAL_RECORD_INTERVAL']),
+  'remote_pub': is_new_start(SETTINGS['REMOTE_PUBLISH_INTERVAL']),
+  'remote_backup': is_new_start(SETTINGS['REMOTE_BACKUP_INTERVAL']),
+}
+
+def setting_handler(r):
+  setting_mapper = {
+    'auto_start': 
+      lambda v: config.set('SETTINGS', 'AUTO_START', v), 
+    'auto_publish':
+      lambda v: config.set('SETTINGS', 'AUTO_PUBLISH', v),
+    'auto_backup':
+      lambda v: config.set('SETTINGS', 'AUTO_BACKUP', v),
+    'local_publish_interval':
+      lambda v: config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(v)),
+    'local_record_interval':
+      lambda v: config.set('SETTINGS', 'LOCAL_RECORD_INTERVAL', str(v)),
+    'remote_publish_interval':
+      lambda v: config.set('SETTINGS', 'REMOTE_PUBLISH_INTERVAL', str(v)),
+    'remote_backup_interval':
+      lambda v: config.set('SETTINGS', 'REMOTE_BACKUP_INTERVAL', str(v)),
+  }
+  while r.llen('settings'):
+    for key, value in json.loads(r.rpop('settings')).items():
+      setting_mapper[key](str(value))
+      with open('settings.ini', 'w') as configfile:
+        config.write(configfile)
+
+
+def get_utc_time():
+  return datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
 
 
 def status_setter(meassys, r):
@@ -59,30 +96,6 @@ def command_handler(r, meassys):
   while r.llen('commands'):
     command = r.rpop('commands').decode('utf-8')
     command_mapper[command]()
-
-
-def setting_handler(r):
-  setting_mapper = {
-    'auto_start': 
-      lambda v: config.set('SETTINGS', 'AUTO_START', v), 
-    'auto_publish':
-      lambda v: config.set('SETTINGS', 'AUTO_PUBLISH', v),
-    'auto_backup':
-      lambda v: config.set('SETTINGS', 'AUTO_BACKUP', v),
-    'local_publish_interval':
-      lambda v: config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(v)),
-    'local_record_interval':
-      lambda v: config.set('SETTINGS', 'LOCAL_RECORD_INTERVAL', str(v)),
-    'remote_publish_interval':
-      lambda v: config.set('SETTINGS', 'REMOTE_PUBLISH_INTERVAL', str(v)),
-    'remote_backup_interval':
-      lambda v: config.set('SETTINGS', 'REMOTE_BACKUP_INTERVAL', str(v)),
-  }
-  while r.llen('settings'):
-    for key, value in json.loads(r.rpop('settings')).items():
-      setting_mapper[key](str(value))
-      with open('settings.ini', 'w') as configfile:
-        config.write(configfile)
 
 
 if __name__ == '__main__':

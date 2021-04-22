@@ -40,7 +40,7 @@ r = redis.Redis(
 
 while True:
   sleep(1)
-  # while r.llen('data') > 1:
-  #   r.rpop('data')
+  while r.llen('data') > 1:
+    r.rpop('data')
   if r.llen('data') > 0:
     print(r.rpop('data').decode('utf-8'))

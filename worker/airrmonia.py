@@ -1,4 +1,4 @@
-import time
+# import time
 import re
 
 from serial.serialutil import SerialException
