@@ -1,21 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
-
+import 'antd/dist/antd.css'
 import Row from 'antd/lib/row';
 import Col from 'antd/lib/col';
+
+
+import MainSwitch from './components/MainSwitch.jsx';
 
 
 class App extends Component {
   render() {
     return (
-      <Row>
-        <Col span={6} offset={1}>
-          col_1
-        </Col>
-        <Col span={14}>
-          col_2
-        </Col>
-      </Row>
+      <div className="App">
+        <Row style={{paddingTop: 20}}>
+          <Col style={{padding: 10}} span={8} offset={0}>
+            <MainSwitch />
+          </Col>
+          <Col style={{padding: 10}} span={16} offset={0}>
+            col-6 col-offset-6
+          </Col>
+        </Row>
+      </div>
     );
   };
 };
