@@ -1,0 +1,12 @@
+[Unit]
+Description=NH3 measurement api
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/nh3/backend/
+Environment="FLASK_AP=/home/pi/nh3/backend/app.py"
+ExecStart=/home/pi/nh3/venv/bin/python -m flask run
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
