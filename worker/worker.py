@@ -1,4 +1,5 @@
-import sys, os, configparser
+import sys, os
+from configparser import ConfigParser
 from time import sleep
 from datetime import datetime
 import json
@@ -20,7 +21,7 @@ from helpers import (
 )
 
 
-config = configparser.ConfigParser()
+config = ConfigParser()
 config.read('settings.ini')
 AUTO_START = True if config['SETTINGS']['AUTO_START'] == 'True' else False
 AUTO_PUBLISH = True if config['SETTINGS']['AUTO_PUBLISH'] == 'True' else False

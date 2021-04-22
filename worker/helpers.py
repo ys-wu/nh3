@@ -1,9 +1,15 @@
 from datetime import datetime
 from time import sleep
+from configparser import ConfigParser
+import json
 
 import redis
 
 import conf
+
+
+config = ConfigParser()
+config.read('settings.ini')
 
 
 def get_utc_time():
@@ -55,6 +61,30 @@ def command_handler(r, meassys):
     command_mapper[command]()
 
 
+def setting_handler(r):
+  setting_mapper = {
+    'auto_start': 
+      lambda v: config.set('SETTINGS', 'AUTO_START', v), 
+    'auto_publish':
+      lambda v: config.set('SETTINGS', 'AUTO_PUBLISH', v),
+    'auto_backup':
+      lambda v: config.set('SETTINGS', 'AUTO_BACKUP', v),
+    'local_publish_interval':
+      lambda v: config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(v)),
+    'local_record_interval':
+      lambda v: config.set('SETTINGS', 'LOCAL_RECORD_INTERVAL', str(v)),
+    'remote_publish_interval':
+      lambda v: config.set('SETTINGS', 'REMOTE_PUBLISH_INTERVAL', str(v)),
+    'remote_backup_interval':
+      lambda v: config.set('SETTINGS', 'REMOTE_BACKUP_INTERVAL', str(v)),
+  }
+  while r.llen('settings'):
+    for key, value in json.loads(r.rpop('settings')).items():
+      setting_mapper[key](str(value))
+      with open('settings.ini', 'w') as configfile:
+        config.write(configfile)
+
+
 if __name__ == '__main__':
 
   # gen = is_new_start(2)
@@ -75,7 +105,15 @@ if __name__ == '__main__':
     db=conf.REDIS['DB'],
   )
 
-  for i in range(10):
-    push_to_redis(r, 'data', i, 5)
-  while r.llen('data'):
-    print(r.rpop('data'))
+  # for i in range(10):
+  #   push_to_redis(r, 'data', i, 5)
+  # while r.llen('data'):
+  #   print(r.rpop('data'))
+
+  settings = [
+    {'auto_start': True, 'local_publish_interval': 2},
+    {'remote_backup_interval': 3600}
+  ]
+  for x in settings:
+    r.lpush('settings', json.dumps(x))
+  setting_handler(r)
