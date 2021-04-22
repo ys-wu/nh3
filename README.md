@@ -61,3 +61,5 @@
 ## React
 - `sudo apt-get install nodejs npm`
 - `sudo npm install -g npx`
+- `sudo yarn add antd --network-timeout 100000`
+
