@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Switch from 'antd/lib/switch';
 
 
 export default function MainSwitch() {
-  const [running, setRunningg] = useState(false);
+  const [running, setRunningg] = useState(true);
+
+  useEffect(() => {
+    if (running) {
+      
+    } else {
+
+    };
+  }, [useEffect])
+
+  
 
   const onChangeRunning = checked => {
     setRunningg(checked);

@@ -63,3 +63,6 @@
 - `sudo npm install -g npx`
 - `sudo yarn add antd --network-timeout 100000`
 
+## Nginx
+- `sudo apt install nginx`
+- `sudo /etc/init.d/nginx start`

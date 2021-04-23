@@ -1,0 +1,13 @@
+{
+  "python.pythonPath": "venv/bin/python3",
+  "python.analysis.extraPaths": [
+    "./worker",
+    "./backend"
+  ],
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/node_modules/*/**": true
+  }
+}
+
