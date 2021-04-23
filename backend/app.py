@@ -12,19 +12,19 @@ from services import (
 app = Flask(__name__)
 
 
-@app.route('/data')
+@app.route('/api/data')
 def data():
   data = get_data()
   return data
 
 
-@app.route('/error')
+@app.route('/api/error')
 def error():
   error = get_error()
   return error
 
 
-@app.route('/command', methods=['POST'])
+@app.route('/api/command', methods=['POST'])
 def command():
   command = request.form['command']
   if send_command(command):
@@ -33,7 +33,7 @@ def command():
     return {'message': 'bad command'}
 
 
-@app.route('/status', methods=['POST'])
+@app.route('/api/status', methods=['POST'])
 def status():
   status = request.form['status']
   if send_status(status):
@@ -42,7 +42,7 @@ def status():
     return {'message': 'bad status'}
 
 
-@app.route('/settings', methods=['POST'])
+@app.route('/api/settings', methods=['POST'])
 def settings():
   settings = request.form
   if send_settings(settings):
