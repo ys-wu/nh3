@@ -1,25 +1,22 @@
 import { useState } from 'react';
 
 import url from '../conf.js';
-import useInterval from '../hooks/useInterval';
+import useInterval from '../hooks/useInterval.jsx';
+import apiGet from '../helpers/apiGet.js';
 
 
 export default function DataTable() {
-
   const urlData = url + 'data';
-
   const [data, setData] = useState(null);
 
-  const fetchData = () => {
-    fetch(urlData)
-      .then(res => res.json())
-      .then(setData)
+  const dataProcessor = data => {
+    setData(data);
+    return data['status'];
   };
 
   useInterval(() => {
-    fetchData();
+    apiGet(urlData, dataProcessor);
     setTimeout(() => {}, 100);
-    console.log(data);
   }, 500);
   
   return 'data table';

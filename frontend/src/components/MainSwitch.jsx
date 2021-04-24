@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Switch from 'antd/lib/switch';
 
+import url from '../conf.js';
+import apiPost from '../helpers/apiPost.js';
+
 
 export default function MainSwitch() {
-  const [running, setRunningg] = useState(true);
+  const urlCommand = url + 'command';
+  const [start, setStart] = useState(true);
 
   useEffect(() => {
-    if (running) {
-      
+    if (start) {
+      apiPost(urlCommand, {command: 'start'});
     } else {
-
+      apiPost(urlCommand, {command: 'stop'});
     };
-  }, [useEffect])
+  }, [start])
 
-  
-
-  const onChangeRunning = checked => {
-    setRunningg(checked);
+  const onChangeStart = checked => {
+    setStart(checked);
   };
 
-  return <Switch style={{ margin: 5 }} onChange={onChangeRunning} />
+  return <Switch style={{ margin: 5 }} onChange={onChangeStart} />
 };

@@ -26,7 +26,7 @@ def error():
 
 @app.route('/api/command', methods=['POST'])
 def command():
-  command = request.form['command']
+  command = request.get_json()['command']
   if send_command(command):
     return {'message': 'received a command'} 
   else:
@@ -35,7 +35,7 @@ def command():
 
 @app.route('/api/status', methods=['POST'])
 def status():
-  status = request.form['status']
+  status = request.get_json()['status']
   if send_status(status):
     return {'message': 'received a status'}
   else:
@@ -44,7 +44,7 @@ def status():
 
 @app.route('/api/settings', methods=['POST'])
 def settings():
-  settings = request.form
+  settings = request.get_json()
   if send_settings(settings):
     return {'message': 'received settings'}
   else:
