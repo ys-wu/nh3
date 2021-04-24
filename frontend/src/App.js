@@ -6,6 +6,7 @@ import Col from 'antd/lib/col';
 
 
 import MainSwitch from './components/MainSwitch.jsx';
+import DataTable from './components/DataTable.jsx';
 
 
 class App extends Component {
@@ -14,7 +15,12 @@ class App extends Component {
       <div className="App">
         <Row style={{paddingTop: 20}}>
           <Col style={{padding: 10}} span={8} offset={0}>
-            <MainSwitch />
+            <Row>
+              <MainSwitch />
+            </Row>
+            <Row>
+              <DataTable />
+            </Row>
           </Col>
           <Col style={{padding: 10}} span={16} offset={0}>
             col-6 col-offset-6
