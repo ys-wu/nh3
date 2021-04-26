@@ -7,7 +7,7 @@ import Col from 'antd/lib/col';
 import url from './conf.js';
 import useInterval from './hooks/useInterval.jsx';
 import apiGet from './helpers/apiGet.js';
-import MainSwitch from './components/MainSwitch.jsx';
+import MainButton from './components/MainButton.jsx';
 import DataTable from './components/DataTable.jsx';
 
 
@@ -31,7 +31,7 @@ export default function App () {
       <Row style={{paddingTop: 20}}>
         <Col style={{padding: 10}} span={8} offset={0}>
           <Row>
-            <MainSwitch />
+            <MainButton />
           </Row>
           <Row>
             <DataTable />
