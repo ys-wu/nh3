@@ -18,7 +18,7 @@ export default function App () {
 
   const dataProcessor = data => {
     setData(data);
-    return data['status'];
+    return data['data']['Status'];
   };
 
   useInterval(() => {

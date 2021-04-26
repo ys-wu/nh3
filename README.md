@@ -5,6 +5,7 @@
 ### Remote access to Raspberry Pi
 - `remote.it`
 - frp
+- `scp -P <port number> -r local/path user@hostname:destination/path/`
 
 ### VSCode Remote-SSH
 - `Cmd+Shift-P`
