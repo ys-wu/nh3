@@ -17,30 +17,40 @@ export default function App () {
   const [data, setData] = useState(null);
 
   const dataProcessor = data => {
-    setData(data);
-    return data['data']['Status'];
+    if (data) {
+      if (data['data'] !== null) {
+        setData(data);
+        return data['data']['Status'];
+      } else {
+        return 'get empty data';
+      };
+    };  
+    return 'cannot get data';
   };
 
   useInterval(() => {
     apiGet(urlData, dataProcessor);
     setTimeout(() => {}, 100);
-  }, 2000);
+  }, 500);
 
   return (
     <div className="App">
-      <Row style={{paddingTop: 20}}>
-        <Col style={{padding: 10}} span={8} offset={0}>
-          <Row>
-            <MainButton data={data}/>
+      {
+        !data ? null :
+          <Row style={{paddingTop: 20}}>
+            <Col style={{padding: 10}} span={8} offset={0}>
+              <Row>
+                <MainButton data={data}/>
+              </Row>
+              <Row>
+                <DataTable />
+              </Row>
+            </Col>
+            <Col style={{padding: 10}} span={16} offset={0}>
+              <h1>Plots</h1>
+            </Col>
           </Row>
-          <Row>
-            <DataTable />
-          </Row>
-        </Col>
-        <Col style={{padding: 10}} span={16} offset={0}>
-          <h1>Plots</h1>
-        </Col>
-      </Row>
+      }
     </div>
   );
 };

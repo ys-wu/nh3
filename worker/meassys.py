@@ -18,11 +18,15 @@ class MeasSys():
     return 'Airrmonia + Sample MFC + Calibration MFC'
   
   def start(self):
+    self.mfc_cal.set(0)
+    self.airrmonia.liquid_span_cal_valve_off()
     self.airrmonia.start()
     self.mfc_sample.set(conf.MFC_SAMPLE['FLOW'])
     self.status = 'Sampling'
 
   def stop(self):
+    self.mfc_cal.set(0)
+    self.airrmonia.liquid_span_cal_valve_off()
     self.airrmonia.stop()
     self.mfc_sample.set(0)
     self.status = 'Idle'
