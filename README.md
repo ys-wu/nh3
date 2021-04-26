@@ -70,3 +70,10 @@
 - `cat /etc/nginx/sites-enabled/default`
 - `sudo cp nginx/default /etc/nginx/sites-enabled/`
 - `sudo /etc/init.d/nginx restart`
+
+## MongoDB
+- `sudo apt update`
+- `sudo apt upgrade`
+- `sudo apt install mongodb`
+- `sudo systemctl enable mongodb`
+- `sudo systemctl start mongodb`
