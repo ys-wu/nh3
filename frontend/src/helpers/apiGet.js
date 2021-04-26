@@ -5,6 +5,6 @@ export default function apiGet(
   fetch(url)
     .then(res => res.json())
     .then(processor)
-    .then(res => console.log('Get res:', res))
+    // .then(res => console.log('Get res:', res))
     .catch(console.error);
 };

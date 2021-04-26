@@ -38,15 +38,15 @@ export default function App () {
       {
         !data ? null :
           <Row style={{paddingTop: 20}}>
-            <Col style={{padding: 10}} span={8} offset={0}>
+            <Col style={{padding: 10}} span={12} offset={0}>
               <Row>
                 <MainButton data={data}/>
               </Row>
               <Row>
-                <DataTable />
+                <DataTable data={data}/>
               </Row>
             </Col>
-            <Col style={{padding: 10}} span={16} offset={0}>
+            <Col style={{padding: 10}} span={12} offset={0}>
               <h1>Plots</h1>
             </Col>
           </Row>
