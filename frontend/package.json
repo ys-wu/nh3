@@ -4,8 +4,12 @@
   "private": true,
   "dependencies": {
     "antd": "^4.15.2",
+    "plotly": "^1.0.6",
+    "plotly.js": "^1.58.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-plotly": "^1.0.0",
+    "react-plotly.js": "^2.5.1",
     "react-scripts": "0.9.5"
   },
   "devDependencies": {},

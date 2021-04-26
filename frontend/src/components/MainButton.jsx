@@ -43,7 +43,7 @@ export default function MainButon({ data }) {
         };
       };
     };
-  }, 1000);
+  }, 2000);
 
   const onStart = () => {
     setStart(true);

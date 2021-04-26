@@ -6,8 +6,6 @@ import Table from 'antd/lib/table';
 
 export default function DataTable({ data }) {
 
-  console.log(data);
-
   const measureColumns = [
     {
       title: 'Data',
@@ -50,8 +48,8 @@ export default function DataTable({ data }) {
 
   return (
     <div>
-      <Row>
-        <h3 tyle={{ margin: 10 }}>{ data['dttm'] }</h3>
+      <Row style={{ marginLeft: 20 }}>
+        <h3>{ data['dttm'] }</h3>
       </Row>
       <Row>
         <Col style={{ padding: 10 }} span={12} offset={0}>

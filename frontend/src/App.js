@@ -9,17 +9,35 @@ import apiGet from './helpers/apiGet.js';
 import useInterval from './hooks/useInterval.jsx';
 import MainButton from './components/MainButton.jsx';
 import DataTable from './components/DataTable.jsx';
+import TimeSeriesPlot from './components/TimeSeriesPlot.jsx';
 
 
 export default function App () {
 
   const urlData = url + 'data';
   const [data, setData] = useState(null);
+  const [dataArr, setDataArr] = useState([]);
+
+  const updateArr = rawData => {
+    const { dttm, data } = rawData;
+    const { NH3, NH4 } = data;
+    const newDataArr = [...dataArr];
+    newDataArr.push({
+      dttm: dttm,
+      NH3: NH3,
+      NH4: NH4,
+    });
+    while ((Date.parse(dttm) - Date.parse(newDataArr[0]['dttm'])) >= 60 * 1000) {
+      newDataArr.shift();
+    };
+    setDataArr(newDataArr);
+  };
 
   const dataProcessor = data => {
     if (data) {
       if (data['data'] !== null) {
         setData(data);
+        updateArr(data);
         return data['data']['Status'];
       } else {
         return 'get empty data';
@@ -37,18 +55,22 @@ export default function App () {
     <div className="App">
       {
         !data ? null :
-          <Row style={{paddingTop: 20}}>
-            <Col style={{padding: 10}} span={12} offset={0}>
+          <Row style={{padding: 10}}>
+            <Col span={8} offset={0}>
               <Row>
-                <MainButton data={data}/>
+                <MainButton data={data} />
               </Row>
               <Row>
-                <DataTable data={data}/>
+                <DataTable data={data} />
               </Row>
             </Col>
-            <Col style={{padding: 10}} span={12} offset={0}>
-              <h1>Plots</h1>
-            </Col>
+            {
+              dataArr.length > 0 ?
+                <Col span={16} offset={0}>
+                  <TimeSeriesPlot dataArr={dataArr} />
+                </Col> :
+                null
+            }
           </Row>
       }
     </div>
