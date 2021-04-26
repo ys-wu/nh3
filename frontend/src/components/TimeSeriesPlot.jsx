@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Tabs from 'antd/lib/tabs';
 import Plot from 'react-plotly.js';
+
+const { TabPane } = Tabs;
 
 
 export default function TimeSeriesPlot ({ dataArr }) {
@@ -8,40 +11,46 @@ export default function TimeSeriesPlot ({ dataArr }) {
   const y1 = dataArr.map(v => v['NH3']);
   const y2 = dataArr.map(v => v['NH4']);
 
-  const dataNH3 = [
-    {
-      x: x,
-      y: y1,
-    },
-    { type: 'scatter' },
-  ];
-
-  const dataNH4 = [
-    {
-      x: x,
-      y: y2,
-    },
-    {type: 'scatter'},
-  ];
-
   return (
     <div>
-      <Plot
-        data={dataNH3}
-        layout={{
-          yaxis: {
-            title: 'NH4 (ppt[g])',
-          },
-        }}
-      />
-      <Plot
-        data={dataNH4}
-        layout={{
-          yaxis: {
-            title: 'NH4+ (ppb[aq])',
-          },
-        }}
-      />
+      <Tabs defaultActiveKey="2">
+        <TabPane tab="NH3[g] Time Series" key="1">
+          <Plot
+            data={[
+              {
+                x: x,
+                y: y1,
+              },
+              { type: 'scatter' },
+            ]}
+            layout={{
+              width: 500,
+              height: 400,
+              yaxis: {
+                title: 'NH4 (ppt[g])',
+              },
+            }}
+          />
+        </TabPane>
+        <TabPane tab="NH4+[aq] Time Series" key="2">
+          <Plot
+            data={[
+              {
+                x: x,
+                y: y2,
+              },
+              { type: 'scatter' },
+            ]}
+            layout={{
+              width: 500,
+              height: 400,
+              yaxis: {
+                title: 'NH4+ (ppb[aq])',
+              },
+            }}
+          />
+        </TabPane>
+      </Tabs>
     </div>
   );
 };

@@ -56,7 +56,7 @@ export default function App () {
       {
         !data ? null :
           <Row style={{padding: 10}}>
-            <Col span={8} offset={0}>
+            <Col xs={24} lg={12}>
               <Row>
                 <MainButton data={data} />
               </Row>
@@ -66,7 +66,7 @@ export default function App () {
             </Col>
             {
               dataArr.length > 0 ?
-                <Col span={16} offset={0}>
+                <Col xs={24} lg={12}>
                   <TimeSeriesPlot dataArr={dataArr} />
                 </Col> :
                 null

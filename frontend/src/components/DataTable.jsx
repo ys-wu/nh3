@@ -49,7 +49,7 @@ export default function DataTable({ data }) {
   return (
     <div>
       <Row style={{ marginLeft: 20 }}>
-        <h3>{ data['dttm'] }</h3>
+        <h3>{ data['dttm'] + ' (UTC)' }</h3>
       </Row>
       <Row>
         <Col style={{ padding: 10 }} span={12} offset={0}>
