@@ -78,3 +78,8 @@
 - `sudo systemctl enable mongodb`
 - `sudo systemctl start mongodb`
 - `mongod --version`
+- shell `mongo`
+  - `show dbs`
+  - `use <db>`
+  - `db.dropDatabase()`
+  - `db.data.find().sort({ $natural: -1}).limit(1)`

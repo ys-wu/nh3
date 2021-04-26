@@ -119,6 +119,10 @@ def command_handler(r, meassys):
     command_mapper[command]()
 
 
+def save_data(data):
+  conf.COLLECTION.insert_one(data)
+
+
 if __name__ == '__main__':
 
   # gen = is_new_start(2)

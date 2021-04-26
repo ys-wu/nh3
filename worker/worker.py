@@ -19,7 +19,8 @@ from helpers import (
   setting_handler,
   status_setter,
   push_to_redis,
-  command_handler
+  command_handler,
+  save_data,
 )
 
 
@@ -72,8 +73,11 @@ def main():
       data = {'dttm': dttm, 'data': data, 'status': status, 'errors': errors}
       print(dttm, data['data']['Status'], data['status'])
       
-      data = json.dumps(data)
-      push_to_redis(r, 'data', data)
+      json_data = json.dumps(data)
+      push_to_redis(r, 'data', json_data)
+    
+      if next(GENS['local_record']):
+        save_data(data)
 
 
 if __name__ == '__main__':

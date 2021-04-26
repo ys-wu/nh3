@@ -1,6 +1,8 @@
 import glob
 import time
+
 import serial
+from pymongo import MongoClient
 
 import board
 import busio
@@ -15,6 +17,17 @@ REDIS = {
   'PORT': 6379,
   'DB': 0,
 }
+
+# MongoDB
+mongdb = {
+  'HOST': 'localhost',
+  'PORT': 27017,
+  'DB': 'nh3',
+  'COL': 'data',
+}
+
+db = MongoClient(mongdb['HOST'], mongdb['PORT'])[mongdb['DB']]
+COLLECTION = db[mongdb['COL']]
 
 
 # AIRRMONIA

@@ -1,16 +1,29 @@
 from time import sleep
-import json
+# import json
 
-import redis
+# import redis
+from pymongo import MongoClient, DESCENDING
 
-import conf
+# import conf
 
 
-r = redis.Redis(
-  host=conf.REDIS['HOST'],
-  port=conf.REDIS['PORT'],
-  db=conf.REDIS['DB'],
-)
+MONGODB = {
+  'HOST': 'localhost',
+  'PORT': 27017,
+  'DB': 'nh3',
+  'COL': 'data',
+}
+db = MongoClient(MONGODB['HOST'], MONGODB['PORT'])[MONGODB['DB']]
+collection = db[MONGODB['COL']]
+for i in range(10):
+  sleep(11)
+  print(collection.find_one(sort=[('_id', DESCENDING)]))
+
+# r = redis.Redis(
+#   host=conf.REDIS['HOST'],
+#   port=conf.REDIS['PORT'],
+#   db=conf.REDIS['DB'],
+# )
 
 # commands = [
 #   'stop',
@@ -37,28 +50,28 @@ r = redis.Redis(
 #   sleep(5)
 #   print(status)
 #   r.lpush('status', status)
+ 
+# for i in range(30):
+#   sleep(0.5)
+#   while r.llen('data') > 1:
+#     r.rpop('data')
+#   if r.llen('data') > 0:
+#     print(r.rpop('data').decode('utf-8'))
 
-for i in range(30):
-  sleep(0.5)
-  while r.llen('data') > 1:
-    r.rpop('data')
-  if r.llen('data') > 0:
-    print(r.rpop('data').decode('utf-8'))
+# r.lpush('settings', json.dumps({'local_publish_interval': 1}))
 
-r.lpush('settings', json.dumps({'local_publish_interval': 1}))
+# for i in range(30):
+#   sleep(0.5)
+#   while r.llen('data') > 1:
+#     r.rpop('data')
+#   if r.llen('data') > 0:
+#     print(r.rpop('data').decode('utf-8'))
 
-for i in range(30):
-  sleep(0.5)
-  while r.llen('data') > 1:
-    r.rpop('data')
-  if r.llen('data') > 0:
-    print(r.rpop('data').decode('utf-8'))
+# r.lpush('settings', json.dumps({'local_publish_interval': 2}))
 
-r.lpush('settings', json.dumps({'local_publish_interval': 2}))
-
-while True:
-  sleep(1)
-  while r.llen('data') > 1:
-    r.rpop('data')
-  if r.llen('data') > 0:
-    print(r.rpop('data').decode('utf-8'))
+# while True:
+#   sleep(1)
+#   while r.llen('data') > 1:
+#     r.rpop('data')
+#   if r.llen('data') > 0:
+#     print(r.rpop('data').decode('utf-8'))
