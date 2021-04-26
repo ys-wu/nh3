@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Button from 'antd/lib/button';
 
 import url from '../conf.js';
 import apiPost from '../helpers/apiPost.js';
+import useInterval from '../hooks/useInterval.jsx';
 
 
-export default function MainButon() {
+export default function MainButon({ data }) {
   const urlCommand = url + 'command';
-  const [start, setStart] = useState(true);
+  const [start, setStart] = useState(false);
 
-  useEffect(() => {
-    if (start) {
-      apiPost(urlCommand, {command: 'start'});
-    } else {
-      apiPost(urlCommand, {command: 'stop'});
+
+  useInterval(() => {
+    if (data && (data['data'] !== null)) {
+      if (
+        (start === true) &&
+        (!['Sampling', 'Servicing'].includes(data['data']['Status']))
+      ) {
+        apiPost(urlCommand, { command: 'start' });
+      } else if (
+        (start === false) &&
+        (!['Idle', 'Servicing'].includes(data['data']['Status']))
+      ) {
+        apiPost(urlCommand, { command: 'stop' });
+      };
     };
-  }, [start])
+  }, 5000);
 
   const onStart = () => {
     setStart(true);
