@@ -8,11 +8,18 @@ export default function TimeSeriesPlot ({ dataArr }) {
   const y1 = dataArr.map(v => v['NH3']);
   const y2 = dataArr.map(v => v['NH4']);
 
+  const dataNH3 = [
+    {
+      x: x,
+      y: y1,
+    },
+    { type: 'scatter' },
+  ];
+
   const dataNH4 = [
     {
       x: x,
       y: y2,
-      // marker: { color: 'red' },
     },
     {type: 'scatter'},
   ];
@@ -20,10 +27,18 @@ export default function TimeSeriesPlot ({ dataArr }) {
   return (
     <div>
       <Plot
+        data={dataNH3}
+        layout={{
+          yaxis: {
+            title: 'NH4 (ppt[g])',
+          },
+        }}
+      />
+      <Plot
         data={dataNH4}
         layout={{
           yaxis: {
-            title: 'NH4+ (ppb[aq])'
+            title: 'NH4+ (ppb[aq])',
           },
         }}
       />

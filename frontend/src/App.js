@@ -27,7 +27,7 @@ export default function App () {
       NH3: NH3,
       NH4: NH4,
     });
-    while ((Date.parse(dttm) - Date.parse(newDataArr[0]['dttm'])) >= 60 * 1000) {
+    while ((Date.parse(dttm) - Date.parse(newDataArr[0]['dttm'])) >= 60 * 60 * 1000) {
       newDataArr.shift();
     };
     setDataArr(newDataArr);
