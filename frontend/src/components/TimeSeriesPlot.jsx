@@ -13,7 +13,7 @@ export default function TimeSeriesPlot ({ dataArr }) {
 
   return (
     <div>
-      <Tabs defaultActiveKey="2">
+      <Tabs defaultActiveKey="1">
         <TabPane tab="NH3[g] Time Series" key="1">
           <Plot
             data={[
@@ -27,7 +27,7 @@ export default function TimeSeriesPlot ({ dataArr }) {
               width: 500,
               height: 400,
               yaxis: {
-                title: 'NH4 (ppt[g])',
+                title: 'NH3 (ppt[g])',
               },
             }}
           />
