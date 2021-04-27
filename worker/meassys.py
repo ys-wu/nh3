@@ -89,6 +89,7 @@ class MeasSys():
     data, status = data
     data['Status'] = self.status
     data['AirFlow'] = self.mfc_sample.flow
+    data['ZeroFlow'] = self.mfc_cal.flow
     errors = []
 
     if data['AirFlow'] < conf.MFC_SAMPLE['LOWER_LIMIT']:

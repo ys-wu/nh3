@@ -1,5 +1,5 @@
 from datetime import datetime
-from time import sleep
+# from time import sleep
 from configparser import ConfigParser
 import json
 
@@ -30,6 +30,12 @@ SETTINGS = {
     True if config['SETTINGS']['AUTO_PUBLISH'].lower() == 'true' else False,
   'AUTO_BACKUP':
     True if config['SETTINGS']['AUTO_BACKUP'].lower() == 'true' else False,
+  'AUTO_ZERO':
+    True if config['SETTINGS']['AUTO_ZERO'].lower() == 'true' else False,
+  'AUTO_ZERO_INTERVAL':
+    int(config['SETTINGS']['AUTO_ZERO_INTERVAL']),
+  'AUTO_ZERO_DURATION':
+    int(config['SETTINGS']['AUTO_ZERO_DURATION']),
   'LOCAL_PUBLISH_INTERVAL':
     int(config['SETTINGS']['LOCAL_PUBLISH_INTERVAL']),
   'LOCAL_RECORD_INTERVAL':
@@ -68,6 +74,12 @@ def setting_handler(r):
         config.set('SETTINGS', 'AUTO_PUBLISH', str(value))
       elif key == 'auto_backup':
         config.set('SETTINGS', 'AUTO_BACKUP', str(value))
+      elif key == 'auto_zero':
+        config.set('SETTINGS', 'AUTO_ZERO', str(value))
+      elif key == 'auto_zero_interval':
+        config.set('SETTINGS', 'AUTO_ZERO_INTERVAL', str(value))
+      elif key == 'auto_zero_duration':
+        config.set('SETTINGS', 'AUTO_ZERO_DURATION', str(value))
       elif key == 'local_publish_interval':
         config.set('SETTINGS', 'LOCAL_PUBLISH_INTERVAL', str(value))
         GENS['local_pub'] = is_new_start(value)
@@ -83,6 +95,13 @@ def setting_handler(r):
     with open('settings.ini', 'w') as configfile:
       config.write(configfile)
 
+def is_auto_zero():
+  if SETTINGS['AUTO_ZERO']:
+    t = int(datetime.now().timestamp())
+    if t % SETTINGS['AUTO_ZERO_INTERVAL'] < SETTINGS['AUTO_ZERO_DURATION']:
+      return True
+    return False
+  return False
 
 def get_utc_time():
   return datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
