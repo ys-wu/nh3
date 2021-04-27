@@ -94,11 +94,11 @@ class MeasSys():
     if data['AirFlow'] < conf.MFC_SAMPLE['LOWER_LIMIT']:
       data['NH3'] = None
       errors.append('LowSampleFlow')
-    elif data['AirFlow'] > conf.MFC_SAMPLE['LOWER_LIMIT']:
+    elif data['AirFlow'] > conf.MFC_SAMPLE['UPPER_LIMIT']:
       data['NH3'] = None
       errors.append('HighSampleFlow')
     else:
-      data['NH3'] = data['NH4'] * conf.COEF / data['AirFlow']
+      data['NH3'] = int(data['NH4'] * conf.COEF / data['AirFlow'])
 
     return data, status, errors
 
