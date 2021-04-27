@@ -43,16 +43,12 @@ class MeasSys():
 
   def cal_gas_zero_start(self):
     self.mfc_cal.set(conf.MFC_CAL['FLOW'])
-    if self.status.startswith('Servicing'):
-      self.status == ('Servicing')
-    else:
+    if not self.status == 'Servicing':
       self.status = 'GasZero'
 
   def cal_gas_zero_stop(self):
     self.mfc_cal.set(0)
-    if not self.status.startswith('Servicing'):
-      self.status == ('Servicing')
-    else:
+    if not self.status == 'Servicing':
       self.status = 'Sampling'
 
   def cal_liquid_span_start(self):
