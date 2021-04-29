@@ -80,10 +80,11 @@ def main():
       if next(GENS['local_record']):
         save_data(data)
       
-      if is_auto_zero():
-        meassys.cal_gas_zero_start()
-      else:
-        meassys.cal_gas_zero_stop()
+      if meassys.status != 'Idle':
+        if is_auto_zero():
+          meassys.cal_gas_zero_start()
+        else:
+          meassys.cal_gas_zero_stop()
 
 
 if __name__ == '__main__':
