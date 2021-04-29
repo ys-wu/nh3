@@ -1,4 +1,5 @@
 export default function apiPost(url, data) {
+  console.log('Post params:', data);
   fetch(url, {
     method: 'POST',
     headers: {
