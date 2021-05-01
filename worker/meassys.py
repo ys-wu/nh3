@@ -3,30 +3,30 @@ from time import sleep
 import conf
 
 from airrmonia import Airrmonia
-from mfc import Mfc
+# from mfc import Mfc
 
 
 class MeasSys():
 
-  def __init__(self, airrmonia, mfc_sample, mfc_cal):
+  def __init__(self, airrmonia, mfc_sample=None, mfc_cal=None):
     self.airrmonia = airrmonia
-    self.mfc_sample = mfc_sample
-    self.mfc_cal = mfc_cal
+    # self.mfc_sample = mfc_sample
+    # self.mfc_cal = mfc_cal
     self.status = 'Idle'
 
   def __str__(self):
     return 'Airrmonia + Sample MFC + Calibration MFC'
   
   def start(self):
-    self.mfc_cal.set(0)
+    # self.mfc_cal.set(0)
     self.airrmonia.start()
-    self.mfc_sample.set(conf.MFC_SAMPLE['FLOW'])
+    # self.mfc_sample.set(conf.MFC_SAMPLE['FLOW'])
     self.status = 'Sampling'
 
   def stop(self):
-    self.mfc_cal.set(0)
+    # self.mfc_cal.set(0)
     self.airrmonia.stop()
-    self.mfc_sample.set(0)
+    # self.mfc_sample.set(0)
     self.status = 'Idle'
 
   def air_pump_on(self):
@@ -41,15 +41,15 @@ class MeasSys():
   def liquid_pump_off(self):
     self.airrmonia.liquid_pump_off()
 
-  def cal_gas_zero_start(self):
-    self.mfc_cal.set(conf.MFC_CAL['FLOW'])
-    if not self.status == 'Servicing':
-      self.status = 'GasZero'
+  # def cal_gas_zero_start(self):
+  #   self.mfc_cal.set(conf.MFC_CAL['FLOW'])
+  #   if not self.status == 'Servicing':
+  #     self.status = 'GasZero'
 
-  def cal_gas_zero_stop(self):
-    self.mfc_cal.set(0)
-    if not self.status == 'Servicing':
-      self.status = 'Sampling'
+  # def cal_gas_zero_stop(self):
+  #   self.mfc_cal.set(0)
+  #   if not self.status == 'Servicing':
+  #     self.status = 'Sampling'
 
   def cal_liquid_span_start(self):
     self.air_pump_off()
@@ -84,18 +84,18 @@ class MeasSys():
   
     data, status = data
     data['Status'] = self.status
-    data['AirFlow'] = self.mfc_sample.flow
-    data['ZeroFlow'] = self.mfc_cal.flow
+    # data['AirFlow'] = self.mfc_sample.flow
+    # data['ZeroFlow'] = self.mfc_cal.flow
     errors = []
 
-    if data['AirFlow'] < conf.MFC_SAMPLE['LOWER_LIMIT']:
-      data['NH3'] = None
-      errors.append('LowSampleFlow')
-    elif data['AirFlow'] > conf.MFC_SAMPLE['UPPER_LIMIT']:
-      data['NH3'] = None
-      errors.append('HighSampleFlow')
-    else:
-      data['NH3'] = int(data['NH4'] * conf.COEF / data['AirFlow'])
+    # if data['AirFlow'] < conf.MFC_SAMPLE['LOWER_LIMIT']:
+    #   data['NH3'] = None
+    #   errors.append('LowSampleFlow')
+    # elif data['AirFlow'] > conf.MFC_SAMPLE['UPPER_LIMIT']:
+    #   data['NH3'] = None
+    #   errors.append('HighSampleFlow')
+    # else:
+    #   data['NH3'] = int(data['NH4'] * conf.COEF / data['AirFlow'])
 
     return data, status, errors
 

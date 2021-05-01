@@ -4,11 +4,11 @@ import time
 import serial
 from pymongo import MongoClient
 
-import board
-import busio
-import adafruit_ads1x15.ads1015 as ADS
-from adafruit_ads1x15.analog_in import AnalogIn
-import adafruit_mcp4725
+# import board
+# import busio
+# import adafruit_ads1x15.ads1015 as ADS
+# from adafruit_ads1x15.analog_in import AnalogIn
+# import adafruit_mcp4725
 
 
 # Redis
@@ -86,27 +86,27 @@ STATUS_BITS = {
 
 
 # MFC
-i2c = busio.I2C(board.SCL, board.SDA)
-ads = ADS.ADS1015(i2c)
+# i2c = busio.I2C(board.SCL, board.SDA)
+# ads = ADS.ADS1015(i2c)
 
 # MFC_1 sample flow
-MFC_SAMPLE = {
-  'NAME': 'sample',
-  'DAC': adafruit_mcp4725.MCP4725(i2c),
-  'ADC': AnalogIn(ads, ADS.P1),
-  'RANGE': 3.0,
-  'FLOW': 1.0,
-  'LOWER_LIMIT': 0.75,
-  'UPPER_LIMIT': 1.25,
-}
+# MFC_SAMPLE = {
+#   'NAME': 'sample',
+#   'DAC': adafruit_mcp4725.MCP4725(i2c),
+#   'ADC': AnalogIn(ads, ADS.P1),
+#   'RANGE': 3.0,
+#   'FLOW': 1.0,
+#   'LOWER_LIMIT': 0.75,
+#   'UPPER_LIMIT': 1.25,
+# }
 
 # MFC_2 zero air flow
-MFC_CAL = {
-  'NAME': 'cal',
-  'DAC': adafruit_mcp4725.MCP4725(i2c, address=0x63),
-  'ADC': AnalogIn(ads, ADS.P2),
-  'RANGE': 5.0,
-  'FLOW': 2.0,
-  'LOWER_LIMIT': 1.5,
-  'UPPER_LIMIT': 2.5,
-}
+# MFC_CAL = {
+#   'NAME': 'cal',
+#   'DAC': adafruit_mcp4725.MCP4725(i2c, address=0x63),
+#   'ADC': AnalogIn(ads, ADS.P2),
+#   'RANGE': 5.0,
+#   'FLOW': 2.0,
+#   'LOWER_LIMIT': 1.5,
+#   'UPPER_LIMIT': 2.5,
+# }

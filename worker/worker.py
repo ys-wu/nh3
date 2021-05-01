@@ -9,7 +9,7 @@ import redis
 import conf
 
 from airrmonia import Airrmonia
-from mfc import Mfc
+# from mfc import Mfc
 from meassys import MeasSys
 
 from helpers import (
@@ -35,20 +35,21 @@ airrmonia = Airrmonia(conf.PORT, r)
 print(get_utc_time(), 'init Airrmonia.')
 print(airrmonia)
 
-mfc_sample = Mfc(
-  conf.MFC_SAMPLE['NAME'],
-  conf.MFC_SAMPLE['DAC'],
-  conf.MFC_SAMPLE['ADC'],
-  conf.MFC_SAMPLE['RANGE']
-)
-mfc_cal = Mfc(
-  conf.MFC_CAL['NAME'],
-  conf.MFC_CAL['DAC'],
-  conf.MFC_CAL['ADC'],
-  conf.MFC_CAL['RANGE']
-)
+# mfc_sample = Mfc(
+#   conf.MFC_SAMPLE['NAME'],
+#   conf.MFC_SAMPLE['DAC'],
+#   conf.MFC_SAMPLE['ADC'],
+#   conf.MFC_SAMPLE['RANGE']
+# )
+# mfc_cal = Mfc(
+#   conf.MFC_CAL['NAME'],
+#   conf.MFC_CAL['DAC'],
+#   conf.MFC_CAL['ADC'],
+#   conf.MFC_CAL['RANGE']
+# )
 
-meassys = MeasSys(airrmonia, mfc_sample, mfc_cal)
+# meassys = MeasSys(airrmonia, mfc_sample, mfc_cal)
+meassys = MeasSys(airrmonia)
 
 if SETTINGS['AUTO_START']:
   print(get_utc_time(), 'auto start')
