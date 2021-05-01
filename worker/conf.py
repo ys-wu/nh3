@@ -22,7 +22,7 @@ REDIS = {
 mongdb = {
   'HOST': 'localhost',
   'PORT': 27017,
-  'DB': 'nh3',
+  'DB': 'laptop',
   'COL': 'data',
 }
 
