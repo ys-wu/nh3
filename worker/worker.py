@@ -17,7 +17,7 @@ from helpers import (
   GENS,
   get_utc_time,
   setting_handler,
-  is_auto_zero,
+  # is_auto_zero,
   status_setter,
   push_to_redis,
   command_handler,
@@ -81,11 +81,11 @@ def main():
       if next(GENS['local_record']):
         save_data(data)
       
-      if meassys.status != 'Idle':
-        if is_auto_zero():
-          meassys.cal_gas_zero_start()
-        else:
-          meassys.cal_gas_zero_stop()
+      # if meassys.status != 'Idle':
+      #   if is_auto_zero():
+      #     meassys.cal_gas_zero_start()
+      #   else:
+      #     meassys.cal_gas_zero_stop()
 
 
 if __name__ == '__main__':
